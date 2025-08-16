@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from django.contrib.messages import constants
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+# Carregar variáveis do .env
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,13 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-+%t4q#^0=0%#=u11dkwkn%7^+b6!xrv1h3j8c+&7c&gp419=@&"
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+# Segurança: use variáveis de ambiente para SECRET_KEY e DEBUG
+SECRET_KEY = os.environ.get("SECRET_KEY", "unsafe-default-key")
+DEBUG = os.environ.get("DEBUG", "True") == "True"
+ALLOWED_HOSTS = os.environ.get(
+    "ALLOWED_HOSTS", "").split(",") if not DEBUG else []
 
 
 # Application definition
@@ -59,7 +62,8 @@ ROOT_URLCONF = "project.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "global/global_templates")],
+        # Corrigir caminho dos templates globais conforme estrutura do projeto
+        "DIRS": [os.path.join(BASE_DIR, "core/global_templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -122,7 +126,7 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_DIRS = [
-    os.path.join("global/static"),
+    os.path.join(BASE_DIR, "core/static"),
 ]
 
 MEDIA_URL = "/media/"
@@ -148,4 +152,10 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
 SESSION_SAVE_EVERY_REQUEST = False
 
 # Serializer - Padrão JSON
+
 # SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+# Exemplo de arquivo .env:
+# SECRET_KEY=uma-chave-secreta-segura
+# DEBUG=False
+# ALLOWED_HOSTS=meusite.com,www.meusite.com
