@@ -1,17 +1,19 @@
-{% load django_browser_reload %}
-{% django_browser_reload_script %}
-{% load static %}
-<link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.css' %}">
-<link rel="stylesheet" href="{% static 'assets/custom/css/style.css' %}">
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    {% include "parciais/_head.html" %}
+    <title>
+        {% block titulo %}{% endblock titulo %}
+    </title>
 </head>
 <body>
-    <h1>Ola mundo 2</h1>
+    {% include "parciais/_navbar.html" %}
+    <main class="container">
+        {% include "parciais/_messages.html" %}
+        {% block conteudo %}
+        
+        {% endblock conteudo %}
+    </main>
+    {% include "parciais/_footer.html" %}
 </body>
 </html>

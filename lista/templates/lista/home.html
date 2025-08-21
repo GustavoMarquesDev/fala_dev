@@ -1,1 +1,46 @@
 {% extends "base.html" %}
+
+{% block titulo %}
+    Fala Dev - Home
+{% endblock %}
+
+{% block conteudo %}
+    <div class="container">
+        <h1 class="text-center mb-4">Bem-vindo ao Fala Dev!</h1>
+        <p class="text-center">Aqui você pode fazer perguntas e obter respostas da comunidade de desenvolvedores.</p>
+        <div class="text-center">
+            <a href="#" class="btn btn-primary">Começar a Perguntar</a>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <div class="list-group">
+            <h2 class="mb-1">Últimas Perguntas</h2>
+            <div class="single-answer">
+                <a href="#" class="list-group-item list-group-item-action">Como posso melhorar meu código em Python?</a>
+                <a href="#">Ver respostas</a>
+            </div>
+        </div>
+        <div class="list-group">
+            <h2 class="mb-1">Mais Comuns</h2>
+            <div class="single-answer">
+                <a href="#" class="list-group-item list-group-item-action">Como posso melhorar meu código em Python?</a>
+                <a href="#">Ver respostas</a>
+            </div>
+        </div>
+        <div class="list-group">
+            <h2 class="mb-1">Em alta</h2>
+            <div class="single-answer">
+                <a href="#" class="list-group-item list-group-item-action">Como posso melhorar meu código em Python?</a>
+                <a href="#">Ver respostas</a>
+            </div>
+        </div>
+        <div class="list-group">
+            <h2 class="mb-1">Melhor avaliadas</h2>
+            <div class="single-answer">
+                <a href="#" class="list-group-item list-group-item-action">Como posso melhorar meu código em Python?</a>
+                <a href="#">Ver respostas</a>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}

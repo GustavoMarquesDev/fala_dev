@@ -1,0 +1,25 @@
+{% load static  %}
+<footer class="footer-modern bg-dark text-light pt-4 pb-2 mt-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-left mb-2 mb-md-0">
+                <span class="align-middle mr-2"><i class="fab fa-python text-warning"></i></span>
+                <span class="align-middle">Feito com Django</span>
+            </div>
+            <div class="col-md-6 text-center text-md-right">
+                <span class="align-middle mr-2">Gustavo Marques</span>
+                <a href="https://github.com/GustavoMarquesDev" target="_blank" class="footer-icon-link ml-2"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col text-center small text-secondary">
+                &copy; {{ now|date:'Y' }} E-commerce do Gustavo. Todos os direitos reservados.
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="{% static 'assets/bootstrap/js/jquery-3.2.1.slim.min.js' %}"></script>
+<script src="{% static 'assets/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
+<script defer src="{% static 'assets/font-awesome/js/all.js' %}"></script>
+<script src="{% static 'assets/custom/js/scripts.js' %}"></script>
