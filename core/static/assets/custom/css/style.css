@@ -67,10 +67,11 @@ main {
 
 .navbar-nav .nav-link:hover,
 .navbar-nav .nav-link.active {
-  background: #f0f4ff;
-  color: #0056b3 !important;
+  color: var(--secondary) !important;
   box-shadow: 0 2px 8px rgba(0, 123, 255, 0.08);
   text-decoration: none;
+  transform: scale(1.05);
+  filter: brightness(1.1);
 }
 
 .hero-section {
@@ -108,10 +109,15 @@ main {
 
 .btn-ask:hover,
 .btn-ask:focus {
-  background: linear-gradient(90deg, var(--secondary) 20%, var(--accent) 100%);
-  color: #fff !important;
-  box-shadow: 0 4px 16px rgba(52, 58, 64, 0.13);
   text-decoration: none;
+  color: var(--secondary);
+  border-radius: 2rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.07);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none !important;
+  border: none;
 }
 
 .questions-section {
@@ -121,8 +127,8 @@ main {
 }
 .questions-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 2rem;
+  grid-template-columns: 1fr;
+  gap: 1rem;
 }
 .question-card {
   background: var(--card-bg);
@@ -133,7 +139,14 @@ main {
   flex-direction: column;
   align-items: flex-start;
   min-height: 180px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+.question-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
 .question-card h2 {
   font-size: 1.3rem;
   color: var(--primary);
