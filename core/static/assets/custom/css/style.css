@@ -1,11 +1,20 @@
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+:root {
+  --primary: #4e73df;
+  --secondary: #2d3e50;
+  --accent: #ffd700;
+  --background: #f6f8fa;
+  --card-bg: #fff;
+  --text-main: #222;
+  --text-light: #6c757d;
 }
 
 body {
+  background: var(--background);
+  color: var(--text-main);
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  height: 100%;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -15,29 +24,38 @@ main {
   flex: 1;
 }
 
-.navbar {
-  border-radius: 1rem;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07), 0 1.5px 4px rgba(0, 0, 0, 0.03);
-  transition: box-shadow 0.2s;
-
-  i {
-    font-size: 1.3rem;
-    padding-right: 0.3rem;
-  }
-}
-
-.navbar:hover {
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
-}
-
 .navbar-brand {
   font-size: 1.5rem;
-  letter-spacing: 0.5px;
-  color: #2d2d2d !important;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  color: var(--primary) !important;
+  background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform 0.2s;
+}
+.navbar-brand:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.navbar i {
+  font-size: 1.3rem;
+  padding-right: 0.3rem;
+}
+
+.nav-item:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+  transition: transform 0.2s;
 }
 
 .navbar-nav .nav-link {
-  color: #444 !important;
+  color: var(--text-main) !important;
   font-weight: 500;
   border-radius: 0.5rem;
   transition: background 0.2s, color 0.2s, box-shadow 0.2s;
@@ -53,6 +71,125 @@ main {
   color: #0056b3 !important;
   box-shadow: 0 2px 8px rgba(0, 123, 255, 0.08);
   text-decoration: none;
+}
+
+.hero-section {
+  background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
+  color: #fff;
+  text-align: center;
+  padding: 3rem 1rem 2rem 1rem;
+  border-radius: 0 0 32px 32px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 24px rgba(44, 62, 80, 0.08);
+}
+.hero-section h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.hero-section .highlight {
+  color: var(--accent);
+}
+.hero-section p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+.btn-ask {
+  background: var(--accent);
+  color: var(--secondary);
+  font-weight: 600;
+  padding: 0.7rem 2rem;
+  border-radius: 24px;
+  text-decoration: none;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+  transition: transform 0.2s;
+}
+
+.btn-ask:hover,
+.btn-ask:focus {
+  background: linear-gradient(90deg, var(--secondary) 20%, var(--accent) 100%);
+  color: #fff !important;
+  box-shadow: 0 4px 16px rgba(52, 58, 64, 0.13);
+  text-decoration: none;
+}
+
+.questions-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+.questions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+}
+.question-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(44, 62, 80, 0.08);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 180px;
+}
+.question-card h2 {
+  font-size: 1.3rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+.single-answer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.question-link {
+  color: var(--secondary);
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 0.2rem;
+}
+.question-link:hover {
+  color: var(--primary);
+}
+.answer-link {
+  color: var(--primary);
+  font-size: 0.98rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.answer-link:hover {
+  color: var(--secondary);
+}
+
+@media (max-width: 900px) {
+  .questions-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .questions-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-section {
+    padding: 2rem 0.5rem 1.2rem 0.5rem;
+  }
+  .hero-section h1 {
+    font-size: 1.3rem;
+  }
+  .question-card {
+    padding: 1rem 0.5rem;
+  }
 }
 
 .form-div {
@@ -85,4 +222,23 @@ main {
       color: #0056b3;
     }
   }
+}
+
+.footer-modern {
+  background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
+  border-top-left-radius: 1.5rem;
+  border-top-right-radius: 1.5rem;
+
+  a {
+    color: #fff;
+    font-size: 1.2rem;
+  }
+
+  span {
+    font-size: 1rem;
+  }
+}
+
+.footer-span {
+  color: #fff;
 }
