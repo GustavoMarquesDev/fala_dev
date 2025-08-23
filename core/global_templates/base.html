@@ -6,14 +6,13 @@
         {% block titulo %}{% endblock titulo %}
     </title>
 </head>
-<body>
-    {% include "parciais/_navbar.html" %}
-    <main class="container">
-        {% include "parciais/_messages.html" %}
-        {% block conteudo %}
-        
-        {% endblock conteudo %}
-    </main>
-    {% include "parciais/_footer.html" %}
+<body style="position:relative;">
+        {% include "parciais/_navbar.html" %}
+        <main class="container">
+                {% include "parciais/_messages.html" %}
+                {% block conteudo %}
+                {% endblock conteudo %}
+        </main>
+        {% include "parciais/_footer.html" %}
 </body>
 </html>
