@@ -15,9 +15,11 @@
                     Home
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'perfil:criar' %}">Entrar</a>
+            {% if not user.is_authenticated %}
+                <li class="nav-item">
+                <a class="nav-link" href="{% url 'perfil:login' %}">Entrar</a>
             </li>
+            {% endif %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -26,7 +28,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="#">Minhas perguntas</a>
                     <a class="dropdown-item" href="#">Atualizar dados</a>
-                    <a class="dropdown-item" href="#">Sair</a>
+                    <a class="dropdown-item" href="{% url 'perfil:logout' %}">Sair</a>
                     
                 </div>
             </li>
