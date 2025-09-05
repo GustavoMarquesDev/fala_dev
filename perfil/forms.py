@@ -25,10 +25,13 @@ class CadastroForm(UserCreationForm):
         if commit:
             user.save()
             profissao = self.cleaned_data.get("profissao")
-            foto = self.cleaned_data.get("foto")
             nome = self.cleaned_data.get("nome")
             sobrenome = self.cleaned_data.get("sobrenome")
             email = self.cleaned_data.get("email")
-            Perfil.objects.create(user=user, nome=nome, sobrenome=sobrenome,
-                                  email=email, profissao=profissao, foto=foto)
+            perfil = Perfil.objects.create(user=user, nome=nome, sobrenome=sobrenome,
+                                           email=email, profissao=profissao)
+            foto = self.cleaned_data.get("foto")
+            if foto:
+                perfil.foto = foto
+                perfil.save()
         return user

@@ -1,42 +1,47 @@
-{% extends "base.html" %}
+{% extends "perfil/login.html" %}
 {% load crispy_forms_tags %}
 
 {% block titulo %}Criar Perfil{% endblock titulo %}
+{% load static %}
+    <div class="site-overlay"></div>
+    <script>
+      document.body.style.backgroundImage = "url('" + '{% static "assets/custom/img/code-bg.jpg" %}' + "')";
+      document.body.style.backgroundSize = "cover";
+      document.body.style.backgroundPosition = "center center";
+      document.body.style.backgroundRepeat = "no-repeat";
+    </script>
 
-{% block conteudo %}
-
-<div class="auth-container mt-5">
-    <div class="auth-card">
-        <div class="auth-header">
-            <h2>Cadastro</h2>
-            <p class="mb-0">Crie sua conta</p>
-        </div>
-        <div class="auth-content">
-            <div class="row">
-                <div class="{% if not request.user.is_authenticated %}col-lg-7{% else %}col-12{% endif %}">
-                    <div class="form-section">
-                        <form method="POST" action="">
-                            {% csrf_token %}
-                            <div class="row">
-                                <div class="col-md-6">
-                                    {{ form|crispy }}
+{% block formulario %}
+    <div class="form-container mt-5">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2>Cadastro</h2>
+                <p class="mb-5">Crie sua conta</p>
+            </div>
+            <div class="auth-content">
+                <div class="row">
+                    <div class="{% if not request.user.is_authenticated %}col-lg{% else %}col-12{% endif %}">
+                        <div class="form-group">
+                            <form method="POST" enctype="multipart/form-data" action="">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col">
+                                        {{ form|crispy }}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row mt-4">
-                                <div class="col">
-                                    <button type="submit" class="btn btn-modern w-100">
-                                        <i class="fas fa-user-plus"></i>Cadastrar
-                                    </button>
+                                <div class="row mt-4">
+                                    <div class="col">
+                                        <button type="submit" class="btn btn-modern cadastrar w-100">
+                                            <i class="fas fa-user-plus"></i>Cadastrar
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Font Awesome para ícones -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-{% endblock conteudo %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock formulario  %}

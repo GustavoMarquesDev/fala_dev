@@ -13,7 +13,8 @@
       document.body.style.backgroundPosition = "center center";
       document.body.style.backgroundRepeat = "no-repeat";
     </script>
-    <main class="main-content section-wrapper">
+    {% block formulario %}
+        <main class="main-content section-wrapper">
         <div class="form-container">
             <form method="POST" action="{% url 'perfil:login' %}">
                 {% csrf_token %}
@@ -38,4 +39,6 @@
             </form>
         </div>
     </main>
+    {% endblock formulario %}
+    
 {% endblock conteudo %}

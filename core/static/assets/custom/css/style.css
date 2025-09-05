@@ -12,6 +12,7 @@
   background: transparent !important;
   box-shadow: none !important;
   border-radius: 0 !important;
+  margin-top: 78px !important;
 }
 /* Background de código com overlay escuro */
 body {
@@ -47,6 +48,8 @@ body {
   box-shadow: none;
   border: 2px solid var(--primary);
   padding: 3rem;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 body {
@@ -133,7 +136,6 @@ main {
 
 /******************* Hero *******************/
 .hero-section {
-  margin-top: 5rem;
   background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
   color: #fff;
   text-align: center;
@@ -444,6 +446,27 @@ main {
   }
 }
 
+.auth-header {
+  color: var(--background);
+}
+
+.auth-content {
+  color: var(--background);
+}
+
+.text-muted {
+  color: var(--background) !important;
+}
+
+.cadastrar {
+  background: var(--primary);
+  color: var(--card-bg);
+  border-radius: 0.7rem;
+
+  svg {
+    margin-right: 0.2rem;
+  }
+}
 /******************* Footer *******************/
 
 .footer-modern {
@@ -452,6 +475,18 @@ main {
   background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
   border-top-left-radius: 1.5rem;
   border-top-right-radius: 1.5rem;
+
+  .container-footer {
+    max-width: 1140px;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
 
   a {
     color: #fff;
