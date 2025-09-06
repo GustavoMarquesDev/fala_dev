@@ -10,7 +10,7 @@ class CadastroForm(UserCreationForm):
     nome = forms.CharField(required=True)
     sobrenome = forms.CharField(required=True)
     profissao = forms.CharField(required=False)
-    foto = forms.ImageField(required=False)
+    foto = forms.ImageField(required=False, label="Foto de perfil")
 
     class Meta:
         model = User

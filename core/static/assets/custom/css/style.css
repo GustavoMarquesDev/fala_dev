@@ -406,7 +406,7 @@ main {
   margin: 1rem auto;
   max-width: 500px;
   text-align: center;
-  background: rgba(51, 124, 71, 0.85);
+  background: rgba(33, 154, 66, 0.85);
   color: #fff;
   border-radius: 12px;
   border: none;
@@ -414,7 +414,7 @@ main {
   font-size: 1.1rem;
   font-weight: 500;
   padding: 1rem 2rem;
-  margin-top: 5rem;
+  margin-top: 1rem;
 }
 
 .alert-danger {
@@ -431,7 +431,7 @@ main {
   font-size: 1.1rem;
   font-weight: 500;
   padding: 1rem 2rem;
-  margin-top: 5rem;
+  margin-top: 1rem;
 }
 
 @media (max-width: 410px) {
@@ -466,7 +466,14 @@ main {
   svg {
     margin-right: 0.2rem;
   }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+    color: var(--card-bg);
+  }
 }
+
 /******************* Footer *******************/
 
 .footer-modern {
