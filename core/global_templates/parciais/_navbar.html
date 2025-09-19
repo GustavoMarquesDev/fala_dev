@@ -28,7 +28,9 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="#">Minhas perguntas</a>
                     <a class="dropdown-item" href="#">Perfil</a>
-                    <a class="dropdown-item" href="{% url 'perfil:logout' %}">Sair</a>
+                    {% if user.is_authenticated %}
+                        <a class="dropdown-item" href="{% url 'perfil:logout' %}">Sair</a>
+                    {% endif %}
                     
                 </div>
             </li>

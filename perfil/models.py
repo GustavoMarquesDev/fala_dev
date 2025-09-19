@@ -68,7 +68,7 @@ class PerguntasDoUsuario(models.Model):
     descricao = models.TextField()
     criado_em = models.DateTimeField(auto_now_add=True)
     categoria = models.CharField(
-        help_text='Categoria do post',
+        help_text='Selecione uma categoria para ajudar outros devs a encontrar sua pergunta.',
         blank=True,
         null=True,
         default=None,
@@ -143,11 +143,11 @@ class PerguntasDoUsuario(models.Model):
         return self.titulo
 
 
-class Votos(models.Model):
+class RespostasDoUsuario(models.Model):
     class Meta:
-        verbose_name = 'Voto'
-        verbose_name_plural = 'Votos'
-        unique_together = ("usuario", "post")
+        verbose_name = 'Resposta'
+        verbose_name_plural = 'Respostas'
+        unique_together = ("usuario", "post", "resposta")
 
     LIKE = 1
     DISLIKE = -1
@@ -162,7 +162,8 @@ class Votos(models.Model):
         User, on_delete=models.CASCADE, related_name="votos")
     post = models.ForeignKey(
         PerguntasDoUsuario, on_delete=models.CASCADE, related_name="votos")
-    valor = models.SmallIntegerField(choices=OPCOES)
+    avaliacao = models.SmallIntegerField(choices=OPCOES)
+    resposta = models.CharField(max_length=255, blank=True, null=True)
 
 
 class FotoErro(models.Model):

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 
-from perfil.models import PerguntasDoUsuario, FotoErro, Votos
+from perfil.models import PerguntasDoUsuario, FotoErro, RespostasDoUsuario
 from .models import Perfil
 
 
@@ -18,21 +18,21 @@ class PerfilAdmin(admin.ModelAdmin):
     search_fields = ('user',  'nome', 'sobrenome', 'email', 'profissao')
 
 
-class VotosInline(admin.TabularInline):
-    model = Votos
+class RespostasDoUsuarioInline(admin.TabularInline):
+    model = RespostasDoUsuario
     extra = 1
 
 
 class FotosDerroInline(admin.TabularInline):
     model = FotoErro
-    extra = 1
+    extra = 0
 
 
 class PerguntasDoUsuarioAdmin(admin.ModelAdmin):
     list_display = ('titulo', 'usuario', 'categoria', 'criado_em')
     list_display_links = ('titulo',)
     search_fields = ('titulo', 'usuario')
-    inlines = [FotosDerroInline, VotosInline]
+    inlines = [FotosDerroInline, RespostasDoUsuarioInline]
 
 
 admin.site.register(PerguntasDoUsuario, PerguntasDoUsuarioAdmin)

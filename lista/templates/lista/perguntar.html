@@ -1,9 +1,23 @@
 {% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
 
 {% block titulo %}
     Fala Dev!!! - Pergunta ai
 {% endblock %}
 
 {% block conteudo %}
-<h1>ola</h1>
+
+    <h1 class='text-center'>Faça sua pergunta</h1>
+    <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <div id="fotos-container">
+        <input type="file" name="fotos" class="form-control mt-2" onchange="addInput(this)">
+    </div>
+    <button type="submit" class="btn-perguntar">Enviar</button>
+</form>
+
+<script src="{% static 'assets/custom/js/add_foto_input.js' %}"></script>
+    
 {% endblock conteudo %}
