@@ -1,14 +1,20 @@
 from django.shortcuts import redirect, render
 from django.views import View
 from django.contrib import messages
+from django.views.generic import DetailView, ListView
 
 from lista.forms import PerguntaForm
-from perfil.models import FotoErro
+from perfil.models import FotoErro, PerguntasDoUsuario
+
+PER_PAGE = 10
 
 
-class Index(View):
-    def get(self, request):
-        return render(request, 'lista/home.html')
+class Index(ListView):
+    model = PerguntasDoUsuario
+    template_name = 'lista/home.html'
+    context_object_name = 'perguntas'
+    paginate_by = PER_PAGE
+    ordering = ['-criado_em']
 
 
 class Perguntar(View):
@@ -45,3 +51,17 @@ class Perguntar(View):
         else:
             messages.error(request, 'Verifique os dados enviados.')
             return render(request, 'lista/perguntar.html', {'form': form})
+
+
+class Perguntas(View):
+    def get(self, request):
+        perguntas = PerguntasDoUsuario.objects.all().order_by('-criado_em')
+
+        return render(request, 'lista/perguntas.html', {'perguntas': perguntas})
+
+
+class Detalhes(DetailView):
+    model = PerguntasDoUsuario
+    template_name = 'lista/detalhes.html'
+    context_object_name = 'pergunta'
+    slug_url_kwarg = 'pk'

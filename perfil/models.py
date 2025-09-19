@@ -159,11 +159,20 @@ class RespostasDoUsuario(models.Model):
     ]
 
     usuario = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="votos")
+        User, on_delete=models.CASCADE, related_name="usuario_response")
     post = models.ForeignKey(
         PerguntasDoUsuario, on_delete=models.CASCADE, related_name="votos")
     avaliacao = models.SmallIntegerField(choices=OPCOES)
     resposta = models.CharField(max_length=255, blank=True, null=True)
+    imagem = models.ImageField(
+        upload_to="respostas/fotos/%Y/%m/%d",
+        verbose_name="Foto de resposta",
+        blank=True, null=True,
+        help_text='Foto de resposta a ser exibida para todos os usuários '
+    )
+
+    def __str__(self):
+        return f"Resposta do usuário: {self.usuario.username}"
 
 
 class FotoErro(models.Model):
@@ -183,7 +192,7 @@ class FotoErro(models.Model):
         super().save(*args, **kwargs)
 
         if self.foto:
-            resize_image(self.foto, new_width=800)
+            resize_image(self.foto, new_width=600)
 
     def __str__(self):
         return f"Foto do post: {self.post.titulo}"

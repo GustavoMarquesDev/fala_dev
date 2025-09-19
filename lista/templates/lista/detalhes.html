@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}
+    Fala Dev!!! - Perguntas
+{% endblock titulo %}
+
+{% block conteudo %}
+    <div class="questions-section">
+        <div class="questions-grid">
+            <div class="question-card mb-2">
+                <h2 class="mb-1">{{ pergunta.titulo }}</h2>
+                <span>
+                    Enviada por: {{ pergunta.usuario.first_name }} {{ pergunta.usuario.last_name }}
+                </span>
+                <span class="mb-3">Data: {{ pergunta.criado_em }}</span>
+                <div class="single-answer">
+                    <p>{{ pergunta.descricao }}</p>
+                    <div class="fotos-container">
+                        {% for foto in pergunta.fotos.all %}
+                            <div class="single-foto">
+                                <a href="{{ foto.foto.url }}" target="_blank">
+                                    <img src="{{ foto.foto.url }}" alt="Foto de {{ pergunta.titulo }}">
+                                </a>
+                            </div>
+                        {% empty %}
+                            <p>Nenhuma foto enviada.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#" class="answer-link ">
+            <i class="fa-regular fa-comment"></i>
+            Responder
+        </a>
+    </div>
+
+{% endblock conteudo %}

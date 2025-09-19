@@ -10,36 +10,10 @@
         <p>Faça perguntas e obtenha respostas da comunidade de desenvolvedores.</p>
         <a href="{% url 'lista:perguntar' %}" class="btn-ask">Perguntar</a>
     </div>
-    <div class="questions-section">
-        <div class="questions-grid">
-            <div class="question-card">
-                <h2>Últimas Perguntas</h2>
-                <div class="single-answer">
-                    <a href="#" class="question-link">Como centralizar um div?</a>
-                    <a href="#" class="answer-link">Ver respostas</a>
-                </div>
-            </div>
-            <div class="question-card">
-                <h2>Mais Comuns</h2>
-                <div class="single-answer">
-                    <a href="#" class="question-link">Apaguei a base de dados e não tenho backup o que faço?</a>
-                    <a href="#" class="answer-link">Ver respostas</a>
-                </div>
-            </div>
-            <div class="question-card">
-                <h2>Em alta</h2>
-                <div class="single-answer">
-                    <a href="#" class="question-link">O que é Cobol?</a>
-                    <a href="#" class="answer-link">Ver respostas</a>
-                </div>
-            </div>
-            <div class="question-card">
-                <h2>Melhor avaliadas</h2>
-                <div class="single-answer">
-                    <a href="#" class="question-link">Como posso melhorar meu código em Python?</a>
-                    <a href="#" class="answer-link">Ver respostas</a>
-                </div>
-            </div>
+    {% include "parciais/_cardPerguntas.html" %}
+    <div class="row mt-3">
+        <div class="col">
+            {% include "parciais/_pagination.html" %}
         </div>
     </div>
 {% endblock %}

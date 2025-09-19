@@ -1,0 +1,14 @@
+
+<div class="questions-section">
+    <div class="questions-grid">
+        {% for pergunta in perguntas %}
+            <div class="question-card">
+                <h2>{{ pergunta.titulo }}</h2>
+                <div class="single-answer">
+                    <p class="question-link">{{ pergunta.descricao }}</p>
+                    <a href="{% url 'lista:detalhes' pergunta.id %}" class="answer-link">Mais detalhes e respostas <i class="fa-solid fa-forward ml-1"></i></a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

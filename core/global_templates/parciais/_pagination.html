@@ -1,0 +1,60 @@
+{% if is_paginated %}
+
+<div class="pagination mt-5" style="display: flex; justify-content: center; margin-top: 20px;">
+    <ul class="pagination" style="list-style: none; display: flex; gap: 5px; padding: 0; margin: 0;">
+        {% if page_obj.has_previous %}
+        <li class="page-item" style="display: inline;">
+            <a class="page-link" href="?page=1" 
+               style="display: block; padding: 6px 12px; text-decoration: none; border: 1px solid #007bff; 
+                      background: linear-gradient(90deg, #2d3e50 60%, #4e73df 100%); color: #fff; border-radius: 4px;">
+                &laquo;
+            </a>
+        </li>
+        <li class="page-item" style="display: inline;">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" 
+               style="display: block; padding: 6px 12px; text-decoration: none; border: 1px solid #dee2e6; 
+                      background-color: #fff; color: #007bff; border-radius: 4px;">
+                &lsaquo;
+            </a>
+        </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <li class="page-item active" style="display: inline;">
+            <a class="page-link" href="?page={{ num }}" 
+               style="display: block; padding: 6px 12px; text-decoration: none;
+                      background: linear-gradient(90deg, #2d3e50 60%, #4e73df 100%); color: #fff; border-radius: 4px;">
+                {{ num }}
+            </a>
+        </li>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <li class="page-item" style="display: inline;">
+            <a class="page-link" href="?page={{ num }}" 
+               style="display: block; padding: 6px 12px; text-decoration: none; border: 1px solid #dee2e6; 
+                      background-color: #fff; color: #007bff; border-radius: 4px;">
+                {{ num }}
+            </a>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item" style="display: inline;">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}" 
+               style="display: block; padding: 6px 12px; text-decoration: none; border: 1px solid #dee2e6; 
+                      background-color: #fff; color: #007bff; border-radius: 4px;">
+                &rsaquo;
+            </a>
+        </li>
+        <li class="page-item" style="display: inline;">
+            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" 
+               style="display: block; padding: 6px 12px; text-decoration: none;;
+                      background: linear-gradient(90deg, #2d3e50 60%, #4e73df 100%); color: #fff; border-radius: 4px;">
+                &raquo;
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
