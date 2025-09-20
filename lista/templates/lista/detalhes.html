@@ -27,13 +27,48 @@
                             <p>Nenhuma foto enviada.</p>
                         {% endfor %}
                     </div>
+                     <a href="{% url 'lista:resposta' pergunta.id %}" class="answer-link ">
+                        <i class="fa-regular fa-comment mt-3"></i>
+                        Responder
+                    </a>
                 </div>
             </div>
         </div>
-        <a href="#" class="answer-link ">
-            <i class="fa-regular fa-comment"></i>
-            Responder
-        </a>
     </div>
+    <h2 class="text-center">Respostas</h2>
+    {% for resposta in pergunta.votos.all %}
+        <div class="questions-section">
+            <div class="questions-grid">
+                <div class="question-card mb-2">
+                    <h3 class="mb-1">Resposta de {{ resposta.usuario.first_name }} {{ resposta.usuario.last_name }} <i class="fa-solid fa-reply"></i></h3>
+                    <span class="mb-3">Data: {{ resposta.post.criado_em }}</span>
+                    <div class="single-answer">
+                        <p>{{ resposta.resposta }}</p>
+                        {% if resposta.imagem %}
+                            <div class="fotos-container">
+                                <div class="single-foto">
+                                    <a href="{{ resposta.imagem.url }}" target="_blank">
+                                        <img src="{{ resposta.imagem.url }}" alt="Imagem da resposta">
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="questions-section">
+            <div class="questions-grid">
+                <div class="question-card mb-2">
+                    <p class="text-center">Nenhuma resposta ainda. Seja o primeiro a responder!</p>
+                    <a href="{% url 'lista:resposta' pergunta.id %}" class="answer-link ">
+                        <i class="fa-regular fa-comment"></i>
+                        Responder
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 
 {% endblock conteudo %}

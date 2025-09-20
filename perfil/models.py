@@ -162,8 +162,9 @@ class RespostasDoUsuario(models.Model):
         User, on_delete=models.CASCADE, related_name="usuario_response")
     post = models.ForeignKey(
         PerguntasDoUsuario, on_delete=models.CASCADE, related_name="votos")
-    avaliacao = models.SmallIntegerField(choices=OPCOES)
-    resposta = models.CharField(max_length=255, blank=True, null=True)
+    avaliacao = models.SmallIntegerField(
+        choices=OPCOES, default=LIKE, null=True, blank=True)
+    resposta = models.TextField(blank=True, null=True)
     imagem = models.ImageField(
         upload_to="respostas/fotos/%Y/%m/%d",
         verbose_name="Foto de resposta",

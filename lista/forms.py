@@ -1,5 +1,5 @@
 from django import forms
-from perfil.models import PerguntasDoUsuario
+from perfil.models import PerguntasDoUsuario, RespostasDoUsuario
 
 
 class PerguntaForm(forms.ModelForm):
@@ -13,4 +13,17 @@ class PerguntaForm(forms.ModelForm):
             'descricao': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Descrição da pergunta'}),
             'categoria': forms.Select(attrs={'class': 'form-control'}),
 
+        }
+
+
+class RespostaForm(forms.ModelForm):
+
+    class Meta:
+        model = RespostasDoUsuario
+        fields = ['resposta', 'imagem']
+
+        widgets = {
+
+            'resposta': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Digite sua resposta aqui...'}),
+            'imagem': forms.FileInput(attrs={'class': 'form-control'}),
         }

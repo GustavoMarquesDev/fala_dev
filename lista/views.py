@@ -3,8 +3,8 @@ from django.views import View
 from django.contrib import messages
 from django.views.generic import DetailView, ListView
 
-from lista.forms import PerguntaForm
-from perfil.models import FotoErro, PerguntasDoUsuario
+from lista.forms import PerguntaForm, RespostaForm
+from perfil.models import FotoErro, PerguntasDoUsuario, RespostasDoUsuario
 
 PER_PAGE = 10
 
@@ -46,7 +46,7 @@ class Perguntar(View):
             for foto in fotos:
                 FotoErro.objects.create(post=pergunta, foto=foto)
 
-            messages.success(request, 'Pergunta enviada com sucesso.')
+            messages.success(request, 'Resposta enviada com sucesso.')
             return redirect('lista:index')
         else:
             messages.error(request, 'Verifique os dados enviados.')
@@ -57,7 +57,9 @@ class Perguntas(View):
     def get(self, request):
         perguntas = PerguntasDoUsuario.objects.all().order_by('-criado_em')
 
-        return render(request, 'lista/perguntas.html', {'perguntas': perguntas})
+        context = {'perguntas': perguntas}
+
+        return render(request, 'lista/perguntas.html', context)
 
 
 class Detalhes(DetailView):
@@ -65,3 +67,56 @@ class Detalhes(DetailView):
     template_name = 'lista/detalhes.html'
     context_object_name = 'pergunta'
     slug_url_kwarg = 'pk'
+
+
+class Resposta(View):
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(
+                request, 'Faça login para responder perguntas.')
+            return redirect('perfil:login')
+
+        try:
+            pergunta = PerguntasDoUsuario.objects.get(
+                pk=kwargs['pk']).order_by('-created_at')
+        except PerguntasDoUsuario.DoesNotExist:
+            messages.error(request, 'Pergunta não encontrada.')
+            return redirect('lista:index')
+
+        form = RespostaForm()
+        context = {
+            'form': form,
+            'pergunta': pergunta
+        }
+        return render(request, 'lista/resposta.html', context)
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(
+                request, 'Faça login para responder perguntas.')
+            return redirect('perfil:login')
+
+        try:
+            pergunta = PerguntasDoUsuario.objects.get(
+                pk=kwargs['pk']).order_by('-created_at')
+        except PerguntasDoUsuario.DoesNotExist:
+            messages.error(request, 'Pergunta não encontrada.')
+            return redirect('lista:index')
+
+        form = RespostaForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            resposta = form.save(commit=False)
+            resposta.usuario = request.user
+            resposta.post = pergunta
+            resposta.save()  # Salvando no banco de dados
+
+            messages.success(request, 'Resposta enviada com sucesso.')
+            return redirect('lista:detalhes', pk=kwargs['pk'])
+        else:
+            messages.error(request, 'Verifique todos os dados enviados.')
+            context = {
+                'form': form,
+                'pergunta': pergunta
+            }
+            return render(request, 'lista/resposta.html', context)
