@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.contrib import messages
 from django.views.generic import DetailView, ListView
@@ -78,7 +78,7 @@ class Resposta(View):
 
         try:
             pergunta = PerguntasDoUsuario.objects.get(
-                pk=kwargs['pk']).order_by('-created_at')
+                pk=kwargs['pk'])
         except PerguntasDoUsuario.DoesNotExist:
             messages.error(request, 'Pergunta não encontrada.')
             return redirect('lista:index')
@@ -98,7 +98,7 @@ class Resposta(View):
 
         try:
             pergunta = PerguntasDoUsuario.objects.get(
-                pk=kwargs['pk']).order_by('-created_at')
+                pk=kwargs['pk'])
         except PerguntasDoUsuario.DoesNotExist:
             messages.error(request, 'Pergunta não encontrada.')
             return redirect('lista:index')
@@ -120,3 +120,20 @@ class Resposta(View):
                 'pergunta': pergunta
             }
             return render(request, 'lista/resposta.html', context)
+
+
+class EditarResposta(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'lista/editar_resposta.html')
+
+
+class DeletarResposta(View):
+    def get(self, request, *args, **kwargs):
+        resposta_id = self.kwargs.get('pk')
+        print(resposta_id)
+        resposta = get_object_or_404(
+            RespostasDoUsuario, pk=resposta_id, usuario=request.user)
+
+        resposta.delete()
+        messages.success(request, 'Resposta excluída com sucesso.')
+        return redirect('lista:detalhes', pk=resposta.post.pk)

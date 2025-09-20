@@ -9,4 +9,6 @@ urlpatterns = [
     path('perguntas/', views.Perguntas.as_view(), name='perguntas'),
     path('detalhes/<int:pk>/', views.Detalhes.as_view(), name='detalhes'),
     path('resposta/<int:pk>/', views.Resposta.as_view(), name='resposta'),
+    path('editar/<int:pk>/', views.EditarResposta.as_view(), name='editar'),
+    path('deletar/<int:pk>/', views.DeletarResposta.as_view(), name='deletar')
 ]

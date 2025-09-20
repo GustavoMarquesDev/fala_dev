@@ -56,3 +56,17 @@ class Logout(View):
         logout(self.request)
         messages.success(self.request, 'Sessão encerrada')
         return redirect('lista:index')
+
+
+class MinhasPerguntas(View):
+
+    def get(self, request):
+        if not request.user.is_authenticated:
+            messages.error(request, 'Faça login para ver suas perguntas.')
+            return redirect('perfil:login')
+
+        perguntas = models.PerguntasDoUsuario.objects.filter(
+            usuario=request.user).order_by('-criado_em')
+
+        context = {'perguntas': perguntas}
+        return render(request, 'perfil/minhas_perguntas.html', context)
