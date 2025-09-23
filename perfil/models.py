@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.forms import ValidationError
+from django.utils import timezone
 
 from utils import resize_image
 
@@ -148,6 +149,7 @@ class RespostasDoUsuario(models.Model):
         verbose_name = 'Resposta'
         verbose_name_plural = 'Respostas'
         unique_together = ("usuario", "post", "resposta")
+        ordering = ['-data_de_criacao']
 
     LIKE = 1
     DISLIKE = -1
@@ -165,6 +167,7 @@ class RespostasDoUsuario(models.Model):
     avaliacao = models.SmallIntegerField(
         choices=OPCOES, default=LIKE, null=True, blank=True)
     resposta = models.TextField(blank=True, null=True)
+    data_de_criacao = models.DateTimeField(default=timezone.now)
     imagem = models.ImageField(
         upload_to="respostas/fotos/%Y/%m/%d",
         verbose_name="Foto de resposta",

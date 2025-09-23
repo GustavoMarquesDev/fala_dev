@@ -29,13 +29,17 @@
                             <p>Nenhuma foto enviada.</p>
                         {% endfor %}
                     </div>
+                    <a href="{% url 'perfil:minhasRespostas' pergunta.id %}">Ver respostas <i class="fa-solid fa-arrow-right"></i> </a>
                 </div>
             </div>
+            
         {% empty %}
             <p class="text-center">Nenhuma pergunta ainda.</p>
         {% endfor %}
+        
     </div>
 </div>
+
 
 
 {% endblock conteudo %}

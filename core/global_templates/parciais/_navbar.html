@@ -19,22 +19,19 @@
                 <li class="nav-item">
                 <a class="nav-link" href="{% url 'perfil:login' %}">Entrar</a>
             </li>
-            {% endif %}
-            <li class="nav-item dropdown">
+            {% else %}
+                <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Gerenciar Perfil
+                    Ola {{ user.first_name }}!!!
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{% url 'perfil:minhasPerguntas' %}">Minhas perguntas</a>
                     <a class="dropdown-item" href="#">Perfil</a>
-                    {% if user.is_authenticated %}
-                        <a class="dropdown-item" href="{% url 'perfil:logout' %}">Sair</a>
-                    {% endif %}
-                    
+                    <a class="dropdown-item" href="{% url 'perfil:logout' %}">Sair</a>
                 </div>
             </li>
-            
+            {% endif %}
             <li class="nav-item ml-lg-3">
                 <a class="nav-link nav-cart-link d-flex align-items-center position-relative" href="#}">
                     <i class="fa-solid fa-earth-americas"></i>

@@ -9,6 +9,8 @@ import copy
 from . import models
 from . import forms
 
+PER_PAGE = 10
+
 
 class Criar(View):
     def get(self, request):
@@ -70,3 +72,19 @@ class MinhasPerguntas(View):
 
         context = {'perguntas': perguntas}
         return render(request, 'perfil/minhas_perguntas.html', context)
+
+
+class MinhasRespostas(View):
+    def get(self, request, pk):
+        pergunta = get_object_or_404(models.PerguntasDoUsuario, pk=pk)
+
+        respostas = models.RespostasDoUsuario.objects.filter(
+            usuario=request.user,
+            post=pergunta
+        )
+
+        context = {
+            'pergunta': pergunta,
+            'respostas': respostas
+        }
+        return render(request, 'perfil/minhas_respostas.html', context)

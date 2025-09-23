@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}
+    Fala Dev!!! - Minhas Respostas
+{% endblock titulo %}
+
+{% block conteudo %}
+<h1 class="text-center">Minhas Respostas</h1>
+
+{% for resposta in respostas %}
+    <div class="questions-section">
+        <div class="questions-grid">
+            <div class="question-card mb-2">
+                <h3 class="mb-1">
+                    Resposta de {{ resposta.usuario.first_name }} {{ resposta.usuario.last_name }} 
+                    <i class="fa-solid fa-reply"></i>
+                </h3>
+                <span class="mb-3">Data: {{ resposta.data_de_criacao }}</span>
+                <div class="single-answer">
+                    <p>{{ resposta.resposta }}</p>
+                    {% if resposta.imagem %}
+                        <div class="fotos-container">
+                            <div class="single-foto">
+                                <a href="{{ resposta.imagem.url }}" target="_blank">
+                                    <img src="{{ resposta.imagem.url }}" alt="Imagem da resposta">
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% empty %}
+    <p>😢 Nenhuma resposta ainda para essa pergunta.</p>
+{% endfor %}
+
+{% endblock conteudo %}

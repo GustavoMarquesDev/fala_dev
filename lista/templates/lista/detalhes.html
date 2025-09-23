@@ -27,10 +27,17 @@
                             <p>Nenhuma foto enviada.</p>
                         {% endfor %}
                     </div>
-                     <a href="{% url 'lista:resposta' pergunta.id %}" class="answer-link ">
-                        <i class="fa-regular fa-comment mt-3"></i>
-                        Responder
-                    </a>
+                    {% if request.user == pergunta.usuario %}
+                        <a href="{% url 'lista:editar' pergunta.id %}" class="answer-link ">
+                            <i class="fa-regular fa-pencil"></i>
+                            Editar
+                        </a>
+                    {% else%}
+                        <a href="{% url 'lista:resposta' pergunta.id %}" class="answer-link ">
+                            <i class="fa-regular fa-comment mt-3"></i>
+                            Responder
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -41,7 +48,7 @@
             <div class="questions-grid">
                 <div class="question-card mb-2">
                     <h3 class="mb-1">Resposta de {{ resposta.usuario.first_name }} {{ resposta.usuario.last_name }} <i class="fa-solid fa-reply"></i></h3>
-                    <span class="mb-3">Data: {{ resposta.post.criado_em }}</span>
+                    <span class="mb-3">Data: {{ resposta.data_de_criacao }}</span>
                     <div class="single-answer">
                         <p>{{ resposta.resposta }}</p>
                         {% if resposta.imagem %}
@@ -52,23 +59,32 @@
                                     </a>
                                 </div>
                             </div>
-                            {% if request.user == resposta.usuario %}
-                                <div class="buttons-container">
-                                    <a href="{% url 'lista:editar' resposta.id %}">
-                                    <button class="btn btn-primary">Editar<i class="fa-solid fa-pencil"></i></button>
-                                    </a>
-                                    <a href="{% url 'lista:deletar' resposta.pk %}"onclick="return confirm('Tem certeza que deseja deletar a resposta? Esta ação não pode ser desfeita.')">
-                                        <button class="btn btn-danger">Remover <i class="fa-solid fa-trash"></i></button>
-                                    </a>
-                                </div>
-                            {% endif %}
+                        {% endif %}
+                        {% if request.user == resposta.usuario %}
+                            <div class="buttons-container">
+                                <a href="{% url 'lista:editar' resposta.id %}">
+                                <button class="btn btn-primary">Editar<i class="fa-solid fa-pencil"></i></button>
+                                </a>
+                                <a href="{% url 'lista:deletar' resposta.pk %}"onclick="return confirm('Tem certeza que deseja deletar a resposta? Esta ação não pode ser desfeita.')">
+                                    <button class="btn btn-danger">Remover <i class="fa-solid fa-trash"></i></button>
+                                </a>
+                            </div>
                         {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     {% empty %}
-        <div class="questions-section">
+        {% if request.user == pergunta.usuario %}
+            <div class="questions-section">
+            <div class="questions-grid">
+                <div class="question-card mb-2">
+                    <p class="text-center">Nenhuma resposta ainda, fique atento as suas notificações.</p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+            <div class="questions-section">
             <div class="questions-grid">
                 <div class="question-card mb-2">
                     <p class="text-center">Nenhuma resposta ainda. Seja o primeiro a responder!</p>
@@ -79,6 +95,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     {% endfor %}
 
 {% endblock conteudo %}

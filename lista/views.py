@@ -70,6 +70,7 @@ class Detalhes(DetailView):
 
 
 class Resposta(View):
+
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             messages.error(
