@@ -1,0 +1,33 @@
+{% load crispy_forms_tags %}
+{% load  static %}
+
+{% block h1_pagina %}
+
+{% endblock h1_pagina %}
+{% if fotos_existentes %}
+<div class="mt-3">
+    <p><strong>Imagens já adicionadas:</strong></p>
+    <div class="row">
+        {% for foto in fotos_existentes %}
+        <div class="col-6 col-md-3 mb-3">
+            <a href="{{ foto.foto.url }}" target="_blank">
+                <img src="{{ foto.foto.url }}" alt="Foto do erro"  class="img-fluid rounded border mb-2">
+            </a>
+            <form method="POST" action="{% url 'perfil:remover_foto' foto.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-danger">Remover</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <div id="fotos-container">
+        <input type="file" name="fotos" class="form-control mt-2" onchange="addInput(this)">
+    </div>
+    <button type="submit" class="btn-perguntar">Enviar</button>
+</form>
+<script src="{% static 'assets/custom/js/add_foto_input.js' %}"></script>

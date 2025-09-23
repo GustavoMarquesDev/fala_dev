@@ -11,4 +11,11 @@ urlpatterns = [
     path('minhasPerguntas/', views.MinhasPerguntas.as_view(), name='minhasPerguntas'),
     path('minhasRespostas/<int:pk>',
          views.MinhasRespostas.as_view(), name='minhasRespostas'),
+    path('removerPergunta/<int:pk>',
+         views.RemoverPergunta.as_view(), name='removerPergunta'),
+    path('editar/<int:pk>', views.Editar.as_view(), name='editar'),
+    path('remover-foto/<int:pk>/', views.RemoverFoto.as_view(), name='remover_foto'),
+    path('editarResposta/<int:pk>',
+         views.EditarResposta.as_view(), name='editarResposta'),
+    path('listaRespostas/', views.ListaRespostas.as_view(), name='listaRespostas'),
 ]

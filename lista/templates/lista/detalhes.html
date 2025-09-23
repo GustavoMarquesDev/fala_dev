@@ -28,16 +28,11 @@
                         {% endfor %}
                     </div>
                     {% if request.user == pergunta.usuario %}
-                        <a href="{% url 'lista:editar' pergunta.id %}" class="answer-link ">
-                            <i class="fa-regular fa-pencil"></i>
-                            Editar
+                        <a href="{% url 'perfil:minhasPerguntas' %}" class="answer-link ">
+                            <i class="fa-solid fa-forward"></i>
+                            Ver em minhas perguntas
                         </a>
-                    {% else%}
-                        <a href="{% url 'lista:resposta' pergunta.id %}" class="answer-link ">
-                            <i class="fa-regular fa-comment mt-3"></i>
-                            Responder
-                        </a>
-                    {% endif %}
+                    {% endif %} 
                 </div>
             </div>
         </div>
@@ -62,7 +57,7 @@
                         {% endif %}
                         {% if request.user == resposta.usuario %}
                             <div class="buttons-container">
-                                <a href="{% url 'lista:editar' resposta.id %}">
+                                <a href="{% url 'perfil:editarResposta' resposta.id %}">
                                 <button class="btn btn-primary">Editar<i class="fa-solid fa-pencil"></i></button>
                                 </a>
                                 <a href="{% url 'lista:deletar' resposta.pk %}"onclick="return confirm('Tem certeza que deseja deletar a resposta? Esta ação não pode ser desfeita.')">

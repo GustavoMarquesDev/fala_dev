@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+    Fala Dev!!! - Lista de Respostas
+{% endblock titulo %}
+
+{% block conteudo %}
+    <h1>Lista de Respostas</h1>
+    {% for resposta in respostas %}
+        <div class="questions-section">
+            <div class="questions-grid">
+                <div class="question-card mb-2">
+                    <h3 class="mb-1">Resposta de {{ resposta.usuario.first_name }} {{ resposta.usuario.last_name }} <i class="fa-solid fa-reply"></i></h3>
+                    <span class="mb-3">Data: {{ resposta.data_de_criacao }}</span>
+                    <div class="single-answer">
+                        <p>{{ resposta.resposta }}</p>
+                        {% if resposta.imagem %}
+                            <div class="fotos-container">
+                                <div class="single-foto">
+                                    <a href="{{ resposta.imagem.url }}" target="_blank">
+                                        <img src="{{ resposta.imagem.url }}" alt="Imagem da resposta">
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if request.user == resposta.usuario %}
+                            <div class="buttons-container">
+                                <a href="{% url 'perfil:editarResposta' resposta.id %}">
+                                <button class="btn btn-primary">Editar<i class="fa-solid fa-pencil"></i></button>
+                                </a>
+                                <a href="{% url 'lista:deletar' resposta.pk %}"onclick="return confirm('Tem certeza que deseja deletar a resposta? Esta ação não pode ser desfeita.')">
+                                    <button class="btn btn-danger">Remover <i class="fa-solid fa-trash"></i></button>
+                                </a>
+                                <a href="{% url 'lista:detalhes' resposta.post.pk %}">
+                                    <button class="btn btn-secondary"> <i class="fa-solid fa-reply"></i>Ver post completo </i></button>
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock conteudo %}

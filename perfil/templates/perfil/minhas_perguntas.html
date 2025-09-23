@@ -8,36 +8,52 @@
 {% block conteudo %}
 <h1 class="text-center">Minhas Perguntas</h1>
 <div class="questions-section">
-    <div class="questions-grid">
-        {% for pergunta in perguntas %}
-            <div class="question-card mb-2">
-                <h2 class="mb-1">{{ pergunta.titulo }}</h2>
-                <span>
-                    Enviada por: {{ pergunta.usuario.first_name }} {{ pergunta.usuario.last_name }}
-                </span>
-                <span class="mb-3">Data: {{ pergunta.criado_em }}</span>
-                <div class="single-answer">
-                    <p>{{ pergunta.descricao }}</p>
-                    <div class="fotos-container">
-                        {% for foto in pergunta.fotos.all %}
-                            <div class="single-foto">
-                                <a href="{{ foto.foto.url }}" target="_blank">
-                                    <img src="{{ foto.foto.url }}" alt="Foto de {{ pergunta.titulo }}">
-                                </a>
-                            </div>
-                        {% empty %}
-                            <p>Nenhuma foto enviada.</p>
-                        {% endfor %}
+    {% if not request.user.is_authenticated %}
+        <p class="text-center">Você precisa estar logado para ver as suas perguntas.</p>
+        <a href="{% url 'login' %}" class="answer-link ">
+            <i class="fa-regular fa-comment"></i>
+            Entrar
+        </a>
+    {% else %}
+        <div class="questions-grid">
+            {% for pergunta in perguntas %}
+                <div class="question-card mb-2">
+                    <h2 class="mb-1">{{ pergunta.titulo }}</h2>
+                    <span>
+                        Enviada por: {{ pergunta.usuario.first_name }} {{ pergunta.usuario.last_name }}
+                    </span>
+                    <span class="mb-3">Data: {{ pergunta.criado_em }}</span>
+                    <div class="single-answer">
+                        <p>{{ pergunta.descricao }}</p>
+                        <div class="fotos-container">
+                            {% for foto in pergunta.fotos.all %}
+                                <div class="single-foto">
+                                    <a href="{{ foto.foto.url }}" target="_blank">
+                                        <img src="{{ foto.foto.url }}" alt="Foto de {{ pergunta.titulo }}">
+                                    </a>
+                                </div>
+                            {% empty %}
+                                <p>Nenhuma foto enviada.</p>
+                            {% endfor %}
+                        </div>
+                        {% if request.user == pergunta.usuario %}
+                            <a href="{% url 'perfil:minhasRespostas' pergunta.id %}"><i class="fa-solid fa-forward"></i> Ver respostas  </a>
+                            <a href="{% url 'perfil:editar' pergunta.id %}" class="answer-link ">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                                Editar
+                            </a>
+                            <a href="{% url 'perfil:removerPergunta' pergunta.id %}" class="answer-link " onclick="return confirm('Tem certeza que deseja deletar esta pergunta? Esta ação não pode ser desfeita.')">
+                                <i class="fa-solid fa-trash"></i>
+                                Remover
+                            </a>
+                        {% endif %}     
                     </div>
-                    <a href="{% url 'perfil:minhasRespostas' pergunta.id %}">Ver respostas <i class="fa-solid fa-arrow-right"></i> </a>
                 </div>
-            </div>
-            
-        {% empty %}
-            <p class="text-center">Nenhuma pergunta ainda.</p>
-        {% endfor %}
-        
+            {% empty %}
+                <p class="text-center">Nenhuma pergunta ainda.</p>
+            {% endfor %} 
     </div>
+    {% endif %}    
 </div>
 
 

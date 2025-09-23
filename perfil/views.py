@@ -4,8 +4,9 @@ from django.views import View
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-import copy
 
+
+from lista.forms import PerguntaForm, RespostaForm
 from . import models
 from . import forms
 
@@ -79,12 +80,111 @@ class MinhasRespostas(View):
         pergunta = get_object_or_404(models.PerguntasDoUsuario, pk=pk)
 
         respostas = models.RespostasDoUsuario.objects.filter(
-            usuario=request.user,
             post=pergunta
-        )
+        ).order_by('-data_de_criacao')
 
         context = {
             'pergunta': pergunta,
             'respostas': respostas
         }
+
         return render(request, 'perfil/minhas_respostas.html', context)
+
+
+class ListaRespostas(View):
+    def get(self, request):
+        respostas = models.RespostasDoUsuario.objects.filter(
+            usuario=request.user
+        ).order_by('-data_de_criacao')
+        context = {'respostas': respostas}
+        return render(request, 'perfil/lista_respostas.html', context)
+
+
+class RemoverPergunta(View):
+    def get(self, request, pk):
+        pergunta = get_object_or_404(models.PerguntasDoUsuario, pk=pk)
+        if request.user == pergunta.usuario:
+            pergunta.delete()
+            messages.success(request, 'Pergunta removida com sucesso!')
+            return redirect('perfil:minhasPerguntas')
+
+
+class Editar(View):
+    def get(self, request, pk):
+        pergunta = get_object_or_404(models.PerguntasDoUsuario, pk=pk)
+        if request.user != pergunta.usuario:
+            messages.error(request, 'Você não pode editar essa pergunta.')
+            return redirect('perfil:minhasPerguntas')
+
+        form = PerguntaForm(instance=pergunta)
+        fotos_existentes = pergunta.fotos.all()
+        return render(request, 'perfil/editar_pergunta.html', {
+            'form': form,
+            'fotos_existentes': fotos_existentes,
+            'pergunta': pergunta,
+        })
+
+    def post(self, request, pk):
+        pergunta = get_object_or_404(models.PerguntasDoUsuario, pk=pk)
+        if request.user != pergunta.usuario:
+            messages.error(request, 'Você não pode editar essa pergunta.')
+            return redirect('perfil:minhasPerguntas')
+
+        form = PerguntaForm(request.POST, request.FILES, instance=pergunta)
+
+        fotos = request.FILES.getlist('fotos')
+        if form.is_valid():
+            pergunta = form.save(commit=False)
+            pergunta.usuario = request.user
+            pergunta.save()
+            foto = form.cleaned_data.get('foto')
+
+            for foto in fotos:
+                models.FotoErro.objects.update_or_create(
+                    post=pergunta, foto=foto)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Pergunta editada com sucesso!')
+            return redirect('perfil:minhasPerguntas')
+        else:
+            messages.error(request, 'Corrija os erros abaixo.')
+        return render(request, 'perfil/editar_pergunta.html', {'form': form})
+
+
+class RemoverFoto(View):
+    def post(self, request, pk):
+        foto = get_object_or_404(models.FotoErro, pk=pk)
+        pergunta = foto.post
+        if request.user != pergunta.usuario:
+            messages.error(request, 'Você não pode remover esta imagem.')
+            return redirect('perfil:minhasPerguntas')
+
+        foto.delete()
+        messages.success(request, 'Imagem removida com sucesso!')
+        return redirect('perfil:editar', pk=pergunta.pk)
+
+
+class EditarResposta(View):
+    def get(self, request, pk):
+        resposta = get_object_or_404(models.RespostasDoUsuario, pk=pk)
+        if request.user != resposta.usuario:
+            messages.error(request, 'Você não pode editar essa resposta.')
+            return redirect('perfil:minhasRespostas', pk=resposta.post.pk)
+        form = RespostaForm(instance=resposta)
+        return render(request, 'perfil/editar_resposta.html', {'form': form})
+
+    def post(self, request, pk):
+        resposta = get_object_or_404(models.RespostasDoUsuario, pk=pk)
+        if request.user != resposta.usuario:
+            messages.error(request, 'Você não pode editar essa resposta.')
+            return redirect('perfil:minhasRespostas', pk=resposta.post.pk)
+        form = RespostaForm(request.POST, request.FILES, instance=resposta)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Resposta editada com sucesso!')
+            return redirect('perfil:minhasRespostas', pk=resposta.post.pk)
+        else:
+            messages.error(request, 'Corrija os erros abaixo.')
+        return render(request, 'perfil/editar_resposta.html', {'form': form})
