@@ -18,4 +18,11 @@ urlpatterns = [
     path('editarResposta/<int:pk>',
          views.EditarResposta.as_view(), name='editarResposta'),
     path('listaRespostas/', views.ListaRespostas.as_view(), name='listaRespostas'),
+    path('like/<int:pk>/', views.Like.as_view(), name='like'),
+    path('deslike/<int:pk>/', views.Deslike.as_view(), name='deslike'),
+    path('like-resposta-da-resposta/<int:pk>/',
+         views.LikeRespostaDaResposta.as_view(), name='like_resposta_da_resposta'),
+    path('deslike-resposta-da-resposta/<int:pk>/',
+         views.DeslikeRespostaDaResposta.as_view(), name='deslike_resposta_da_resposta'),
+    path('atualizarPerfil/', views.AtualizarPerfil.as_view(), name='atualizarPerfil'),
 ]

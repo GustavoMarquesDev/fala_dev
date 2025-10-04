@@ -3,8 +3,8 @@ from django.views import View
 from django.contrib import messages
 from django.views.generic import DetailView, ListView
 
-from lista.forms import PerguntaForm, RespostaForm
-from perfil.models import FotoErro, PerguntasDoUsuario, RespostasDoUsuario
+from lista.forms import PerguntaForm, RespostaForm, RespostaDaRespostaForm
+from perfil.models import FotoErro, PerguntasDoUsuario, RespostasDoUsuario, RespostaDaResposta
 
 PER_PAGE = 10
 
@@ -121,6 +121,61 @@ class Resposta(View):
                 'pergunta': pergunta
             }
             return render(request, 'lista/resposta.html', context)
+
+
+class RespostaDaResposta(View):
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(
+                request, 'Faça login para responder respostas.')
+            return redirect('perfil:login')
+
+        try:
+            resposta = RespostasDoUsuario.objects.get(
+                pk=kwargs['pk'])
+        except RespostasDoUsuario.DoesNotExist:
+            messages.error(request, 'Resposta não encontrada.')
+            return redirect('lista:index')
+
+        form = RespostaDaRespostaForm()
+        context = {
+            'form': form,
+            'resposta': resposta,
+            'pergunta': resposta.post
+        }
+        return render(request, 'lista/resposta_da_resposta.html', context)
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(
+                request, 'Faça login para responder respostas.')
+            return redirect('perfil:login')
+
+        try:
+            resposta = RespostasDoUsuario.objects.get(
+                pk=kwargs['pk'])
+        except RespostasDoUsuario.DoesNotExist:
+            messages.error(request, 'Resposta não encontrada.')
+            return redirect('lista:index')
+
+        form = RespostaDaRespostaForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            resposta_da_resposta = form.save(commit=False)
+            resposta_da_resposta.usuario = request.user
+            resposta_da_resposta.resposta = resposta
+            resposta_da_resposta.save()
+
+            messages.success(request, 'Resposta enviada com sucesso.')
+            return redirect('lista:detalhes', pk=resposta.post.pk)
+        else:
+            messages.error(request, 'Verifique todos os dados enviados.')
+            context = {
+                'form': form,
+                'resposta': resposta,
+                'pergunta': resposta.post
+            }
+            return render(request, 'lista/resposta_da_resposta.html', context)
 
 
 class EditarResposta(View):

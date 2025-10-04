@@ -61,6 +61,54 @@ class Logout(View):
         return redirect('lista:index')
 
 
+class AtualizarPerfil(View):
+    def get(self, request):
+        if not request.user.is_authenticated:
+            messages.error(
+                request, 'Você precisa estar logado para atualizar seu perfil.')
+            return redirect('perfil:login')
+
+        perfil = get_object_or_404(models.Perfil, user=request.user)
+        form = forms.AtualizarPerfilForm(instance=perfil, user=request.user)
+        return render(request, 'perfil/atualizar_perfil.html', {'form': form, 'perfil': perfil})
+
+    def post(self, request):
+        if not request.user.is_authenticated:
+            messages.error(
+                request, 'Você precisa estar logado para atualizar seu perfil.')
+            return redirect('perfil:login')
+
+        perfil = get_object_or_404(models.Perfil, user=request.user)
+        form = forms.AtualizarPerfilForm(
+            request.POST, request.FILES, instance=perfil, user=request.user)
+
+        if form.is_valid():
+            # Atualiza os dados do perfil
+            form.save()
+
+            # Atualiza os dados do usuário
+            user = request.user
+            user.first_name = form.cleaned_data['nome']
+            user.last_name = form.cleaned_data['sobrenome']
+            user.email = form.cleaned_data['email']
+
+            # Atualiza senha se fornecida
+            nova_senha = form.cleaned_data.get('nova_senha1')
+            if nova_senha:
+                user.set_password(nova_senha)
+                messages.success(
+                    request, 'Perfil e senha atualizados com sucesso!')
+            else:
+                messages.success(request, 'Perfil atualizado com sucesso!')
+
+            user.save()
+
+            return redirect('perfil:atualizarPerfil')
+
+        messages.error(request, 'Corrija os erros abaixo.')
+        return render(request, 'perfil/atualizar_perfil.html', {'form': form, 'perfil': perfil})
+
+
 class MinhasPerguntas(View):
 
     def get(self, request):
@@ -117,7 +165,7 @@ class Editar(View):
             return redirect('perfil:minhasPerguntas')
 
         form = PerguntaForm(instance=pergunta)
-        fotos_existentes = pergunta.fotos.all()
+        fotos_existentes = pergunta.fotos.all()  # type: ignore
         return render(request, 'perfil/editar_pergunta.html', {
             'form': form,
             'fotos_existentes': fotos_existentes,
@@ -188,3 +236,173 @@ class EditarResposta(View):
         else:
             messages.error(request, 'Corrija os erros abaixo.')
         return render(request, 'perfil/editar_resposta.html', {'form': form})
+
+
+class Like(View):
+    def post(self, request, pk):
+        if not request.user.is_authenticated:
+            messages.error(
+                request, 'Você precisa estar logado para avaliar respostas.')
+            return redirect('perfil:login')
+
+        resposta = get_object_or_404(models.RespostasDoUsuario, pk=pk)
+
+        # Usuário não pode avaliar sua própria resposta
+        if request.user == resposta.usuario:
+            messages.error(
+                request, 'Você não pode avaliar sua própria resposta.')
+            return redirect('lista:detalhes', pk=resposta.post.pk)
+
+        # Verifica se o usuário já avaliou esta resposta
+        avaliacao_existente = models.AvaliacaoResposta.objects.filter(
+            usuario=request.user,
+            resposta=resposta
+        ).first()
+
+        if avaliacao_existente:
+            if avaliacao_existente.tipo_avaliacao == models.AvaliacaoResposta.LIKE:
+                # Se já deu like, remove a avaliação
+                avaliacao_existente.delete()
+
+            else:
+                # Se deu dislike, muda para like
+                avaliacao_existente.tipo_avaliacao = models.AvaliacaoResposta.LIKE
+                avaliacao_existente.save()
+
+        else:
+            # Cria nova avaliação de like
+            models.AvaliacaoResposta.objects.create(
+                usuario=request.user,
+                resposta=resposta,
+                tipo_avaliacao=models.AvaliacaoResposta.LIKE
+            )
+
+        return redirect('lista:detalhes', pk=resposta.post.pk)
+
+
+class Deslike(View):
+    def post(self, request, pk):
+        if not request.user.is_authenticated:
+            messages.error(
+                request, 'Você precisa estar logado para avaliar respostas.')
+            return redirect('perfil:login')
+
+        resposta = get_object_or_404(models.RespostasDoUsuario, pk=pk)
+
+        # Usuário não pode avaliar sua própria resposta
+        if request.user == resposta.usuario:
+            messages.error(
+                request, 'Você não pode avaliar sua própria resposta.')
+            return redirect('lista:detalhes', pk=resposta.post.pk)
+
+        # Verifica se o usuário já avaliou esta resposta
+        avaliacao_existente = models.AvaliacaoResposta.objects.filter(
+            usuario=request.user,
+            resposta=resposta
+        ).first()
+
+        if avaliacao_existente:
+            if avaliacao_existente.tipo_avaliacao == models.AvaliacaoResposta.DISLIKE:
+                # Se já deu dislike, remove a avaliação
+                avaliacao_existente.delete()
+
+            else:
+                # Se deu like, muda para dislike
+                avaliacao_existente.tipo_avaliacao = models.AvaliacaoResposta.DISLIKE
+                avaliacao_existente.save()
+
+        else:
+            # Cria nova avaliação de dislike
+            models.AvaliacaoResposta.objects.create(
+                usuario=request.user,
+                resposta=resposta,
+                tipo_avaliacao=models.AvaliacaoResposta.DISLIKE
+            )
+
+        return redirect('lista:detalhes', pk=resposta.post.pk)
+
+
+class LikeRespostaDaResposta(View):
+    def post(self, request, pk):
+        if not request.user.is_authenticated:
+            messages.error(
+                request, 'Você precisa estar logado para avaliar respostas.')
+            return redirect('perfil:login')
+
+        resposta_da_resposta = get_object_or_404(
+            models.RespostaDaResposta, pk=pk)
+
+        # Usuário não pode avaliar sua própria resposta
+        if request.user == resposta_da_resposta.usuario:
+            messages.error(
+                request, 'Você não pode avaliar sua própria resposta.')
+            return redirect('lista:detalhes', pk=resposta_da_resposta.resposta.post.pk)
+
+        # Verifica se o usuário já avaliou esta resposta
+        avaliacao_existente = models.AvaliacaoRespostaDaResposta.objects.filter(
+            usuario=request.user,
+            resposta=resposta_da_resposta
+        ).first()
+
+        if avaliacao_existente:
+            if avaliacao_existente.tipo_avaliacao == models.AvaliacaoRespostaDaResposta.LIKE:
+                # Se já deu like, remove a avaliação
+                avaliacao_existente.delete()
+
+            else:
+                # Se deu dislike, muda para like
+                avaliacao_existente.tipo_avaliacao = models.AvaliacaoRespostaDaResposta.LIKE
+                avaliacao_existente.save()
+
+        else:
+            # Cria nova avaliação de like
+            models.AvaliacaoRespostaDaResposta.objects.create(
+                usuario=request.user,
+                resposta=resposta_da_resposta,
+                tipo_avaliacao=models.AvaliacaoRespostaDaResposta.LIKE
+            )
+
+        return redirect('lista:detalhes', pk=resposta_da_resposta.resposta.post.pk)
+
+
+class DeslikeRespostaDaResposta(View):
+    def post(self, request, pk):
+        if not request.user.is_authenticated:
+            messages.error(
+                request, 'Você precisa estar logado para avaliar respostas.')
+            return redirect('perfil:login')
+
+        resposta_da_resposta = get_object_or_404(
+            models.RespostaDaResposta, pk=pk)
+
+        # Usuário não pode avaliar sua própria resposta
+        if request.user == resposta_da_resposta.usuario:
+            messages.error(
+                request, 'Você não pode avaliar sua própria resposta.')
+            return redirect('lista:detalhes', pk=resposta_da_resposta.resposta.post.pk)
+
+        # Verifica se o usuário já avaliou esta resposta
+        avaliacao_existente = models.AvaliacaoRespostaDaResposta.objects.filter(
+            usuario=request.user,
+            resposta=resposta_da_resposta
+        ).first()
+
+        if avaliacao_existente:
+            if avaliacao_existente.tipo_avaliacao == models.AvaliacaoRespostaDaResposta.DISLIKE:
+                # Se já deu dislike, remove a avaliação
+                avaliacao_existente.delete()
+
+            else:
+                # Se deu like, muda para dislike
+                avaliacao_existente.tipo_avaliacao = models.AvaliacaoRespostaDaResposta.DISLIKE
+                avaliacao_existente.save()
+
+        else:
+            # Cria nova avaliação de dislike
+            models.AvaliacaoRespostaDaResposta.objects.create(
+                usuario=request.user,
+                resposta=resposta_da_resposta,
+                tipo_avaliacao=models.AvaliacaoRespostaDaResposta.DISLIKE
+            )
+
+        return redirect('lista:detalhes', pk=resposta_da_resposta.resposta.post.pk)

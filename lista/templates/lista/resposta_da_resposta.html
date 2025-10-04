@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}
+    Fala Dev!!! - Responder Resposta
+{% endblock titulo %}
+
+{% block conteudo %}
+    <div class="questions-section">
+        <div class="questions-grid">
+            <div class="question-card mb-2">
+                <h2 class="mb-1">Responder à Resposta</h2>
+                <div class="single-answer">
+                    <h4>Pergunta Original:</h4>
+                    <p><strong>{{ pergunta.titulo }}</strong></p>
+                    <p>{{ pergunta.descricao }}</p>
+                    
+                    <hr>
+                    
+                    <h4>Resposta que você está comentando:</h4>
+                    <div class="resposta-original">
+                        <p><strong>Por:</strong> {{ resposta.usuario.first_name }} {{ resposta.usuario.last_name }}</p>
+                        <p>{{ resposta.resposta }}</p>
+                        {% if resposta.imagem %}
+                            <div class="fotos-container">
+                                <div class="single-foto">
+                                    <a href="{{ resposta.imagem.url }}" target="_blank">
+                                        <img src="{{ resposta.imagem.url }}" alt="Imagem da resposta">
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <hr>
+                    
+                    <h4>Sua Resposta:</h4>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="form-group mb-3">
+                            <label for="{{ form.texto_resposta.id_for_label }}">Resposta:</label>
+                            {{ form.texto_resposta }}
+                            {% if form.texto_resposta.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.texto_resposta.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="{{ form.imagem.id_for_label }}">Imagem (opcional):</label>
+                            {{ form.imagem }}
+                            {% if form.imagem.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.imagem.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="buttons-container">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-paper-plane"></i> Enviar Resposta
+                            </button>
+                            <a href="{% url 'lista:detalhes' pergunta.pk %}" class="btn btn-secondary">
+                                <i class="fa-solid fa-arrow-left"></i> Voltar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock conteudo %}

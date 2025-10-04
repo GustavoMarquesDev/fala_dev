@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}
+    Fala Dev!!! - Atualizar Perfil
+{% endblock titulo %}
+
+{% block conteudo %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 class="mb-0">
+                        <i class="fa-solid fa-user-edit me-2"></i>
+                        Atualizar Perfil
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Seção de Informações Pessoais -->
+                        <div class="mb-4">
+                            <h5 class="text-primary mb-3">
+                                <i class="fa-solid fa-user me-2"></i>
+                                Informações Pessoais
+                            </h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.nome.id_for_label }}" class="form-label">
+                                        <i class="fa-solid fa-user me-1"></i>
+                                        Nome *
+                                    </label>
+                                    {{ form.nome }}
+                                    {% if form.nome.errors %}
+                                        <div class="text-danger mt-1">
+                                            {% for error in form.nome.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.sobrenome.id_for_label }}" class="form-label">
+                                        <i class="fa-solid fa-user me-1"></i>
+                                        Sobrenome
+                                    </label>
+                                    {{ form.sobrenome }}
+                                    {% if form.sobrenome.errors %}
+                                        <div class="text-danger mt-1">
+                                            {% for error in form.sobrenome.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">
+                                    <i class="fa-solid fa-envelope me-1"></i>
+                                    Email *
+                                </label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.email.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.profissao.id_for_label }}" class="form-label">
+                                    <i class="fa-solid fa-briefcase me-1"></i>
+                                    Profissão
+                                </label>
+                                {{ form.profissao }}
+                                {% if form.profissao.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.profissao.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Seção de Foto -->
+                        <div class="mb-4">
+                            <h5 class="text-primary mb-3">
+                                <i class="fa-solid fa-camera me-2"></i>
+                                Foto de Perfil
+                            </h5>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.foto.id_for_label }}" class="form-label">
+                                    <i class="fa-solid fa-image me-1"></i>
+                                    Foto de Perfil
+                                </label>
+                                {{ form.foto }}
+                                <div class="form-text">Formatos aceitos: JPG, PNG, GIF. Tamanho máximo: 5MB</div>
+                                {% if form.foto.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.foto.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            {% if perfil.foto %}
+                                <div class="mt-2">
+                                    <small class="text-muted">Foto atual:</small>
+                                    <div class="mt-1">
+                                        <img src="{{ perfil.foto.url }}" alt="Foto atual" class="img-thumbnail" style="max-width: 100px; max-height: 100px;">
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Seção de Segurança -->
+                        <div class="mb-4">
+                            <h5 class="text-primary mb-3">
+                                <i class="fa-solid fa-shield-halved me-2"></i>
+                                Segurança
+                            </h5>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.senha_atual.id_for_label }}" class="form-label">
+                                    <i class="fa-solid fa-lock me-1"></i>
+                                    Senha Atual *
+                                </label>
+                                {{ form.senha_atual }}
+                                <div class="form-text">Digite sua senha atual para confirmar as alterações</div>
+                                {% if form.senha_atual.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.senha_atual.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.nova_senha1.id_for_label }}" class="form-label">
+                                    <i class="fa-solid fa-key me-1"></i>
+                                    Nova Senha
+                                </label>
+                                {{ form.nova_senha1 }}
+                                <div class="form-text">Deixe em branco para manter a senha atual</div>
+                                {% if form.nova_senha1.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.nova_senha1.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.nova_senha2.id_for_label }}" class="form-label">
+                                    <i class="fa-solid fa-key me-1"></i>
+                                    Confirmar Nova Senha
+                                </label>
+                                {{ form.nova_senha2 }}
+                                {% if form.nova_senha2.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.nova_senha2.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Botões de Ação -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'lista:index' %}" class="btn btn-secondary me-md-2 mr-1">
+                                <i class="fa-solid fa-arrow-left me-1"></i>
+                                Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-save me-1"></i>
+                                Salvar Alterações
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock conteudo %}

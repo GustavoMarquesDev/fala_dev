@@ -3,7 +3,9 @@
     <div class="questions-grid">
         {% for pergunta in perguntas %}
             <div class="question-card">
-                <h2>{{ pergunta.titulo }}</h2>
+                <a href="{% url 'lista:detalhes' pergunta.id %}">
+                    <h2>{{ pergunta.titulo }}</h2>
+                </a>
                 <div class="single-answer">
                     <p class="question-link">{{ pergunta.descricao }}</p>
                     <a href="{% url 'lista:detalhes' pergunta.id %}" class="answer-link">Mais detalhes e respostas <i class="fa-solid fa-forward ml-1"></i></a>

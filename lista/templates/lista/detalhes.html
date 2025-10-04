@@ -32,7 +32,13 @@
                             <i class="fa-solid fa-forward"></i>
                             Ver em minhas perguntas
                         </a>
-                    {% endif %} 
+                    {% else %}
+                        <a href="{% url 'lista:resposta' pergunta.id %}" class="answer-link ">
+                            <i class="fa-solid fa-comment"></i>
+                            Responder
+                        </a>
+                    {% endif %}
+
                 </div>
             </div>
         </div>
@@ -63,9 +69,90 @@
                                 <a href="{% url 'lista:deletar' resposta.pk %}"onclick="return confirm('Tem certeza que deseja deletar a resposta? Esta ação não pode ser desfeita.')">
                                     <button class="btn btn-danger">Remover <i class="fa-solid fa-trash"></i></button>
                                 </a>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fa-solid fa-thumbs-up mr-1"></i>{{ resposta.total_likes }}
+                                </button>
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fa-solid fa-thumbs-down mr-1"></i>{{ resposta.total_dislikes }}
+                                </button>
+                                
+                            </div>
+                        {% else %}
+                            <div class="buttons-container">
+                            <a href="{% url 'lista:resposta-da-resposta' resposta.pk %}" class="answer-link ">
+                                <button class="btn btn-info"> <i class="fa-solid fa-reply"></i> Responder Resposta </button>
+                            </a>
+                            <form method="post" action="{% url 'perfil:like' resposta.pk %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fa-solid fa-thumbs-up mr-1"></i>{{ resposta.total_likes }}
+                                </button>
+                            </form>
+                            <form method="post" action="{% url 'perfil:deslike' resposta.pk %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fa-solid fa-thumbs-down mr-1"></i>{{ resposta.total_dislikes }}
+                                </button>
+                            </form>
                             </div>
                         {% endif %}
                     </div>
+                    
+                    <!-- Respostas da Resposta -->
+                    {% if resposta.resposta_da_resposta.all %}
+                        <div class="respostas-da-resposta mt-3">
+                            <h5>Respostas para esta resposta:</h5>
+                            {% for resposta_da_resposta in resposta.resposta_da_resposta.all %}
+                                <div class="resposta-da-resposta ml-4 mb-3 p-3 border-left">
+                                    <h6 class="mb-1">
+                                        Resposta de {{ resposta_da_resposta.usuario.first_name }} {{ resposta_da_resposta.usuario.last_name }}
+                                        <i class="fa-solid fa-reply-all"></i>
+                                    </h6>
+                                    <span class="text-muted small">{{ resposta_da_resposta.data_de_criacao }}</span>
+                                    <p class="mt-2">{{ resposta_da_resposta.texto_resposta }}</p>
+                                    
+                                    {% if resposta_da_resposta.imagem %}
+                                        <div class="fotos-container">
+                                            <div class="single-foto">
+                                                <a href="{{ resposta_da_resposta.imagem.url }}" target="_blank">
+                                                    <img src="{{ resposta_da_resposta.imagem.url }}" alt="Imagem da resposta" style="max-width: 200px;">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    {% if request.user == resposta_da_resposta.usuario %}
+                                        <div class="buttons-container mt-2">
+                                            <button type="submit" class="btn btn-success btn-sm">
+                                                <i class="fa-solid fa-thumbs-up mr-1"></i>{{ resposta_da_resposta.total_likes }}
+                                            </button>
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="fa-solid fa-thumbs-down mr-1"></i>{{ resposta_da_resposta.total_dislikes }}
+                                            </button>
+                                        </div>
+                                    {% else %}
+                                        <div class="buttons-container mt-2">
+                                            <a href="{% url 'lista:resposta-da-resposta' resposta.pk %}" class="answer-link">
+                                                <button class="btn btn-info btn-sm"> <i class="fa-solid fa-reply"></i> Responder </button>
+                                            </a>
+                                            <form method="post" action="{% url 'perfil:like_resposta_da_resposta' resposta_da_resposta.pk %}" style="display: inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm">
+                                                    <i class="fa-solid fa-thumbs-up mr-1"></i>{{ resposta_da_resposta.total_likes }}
+                                                </button>
+                                            </form>
+                                            <form method="post" action="{% url 'perfil:deslike_resposta_da_resposta' resposta_da_resposta.pk %}" style="display: inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="fa-solid fa-thumbs-down mr-1"></i>{{ resposta_da_resposta.total_dislikes }}
+                                                </button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
