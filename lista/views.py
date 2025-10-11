@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.contrib import messages
 from django.views.generic import DetailView, ListView
+from django.db.models import Q
 
 from lista.forms import PerguntaForm, RespostaForm, RespostaDaRespostaForm
 from perfil.models import FotoErro, PerguntasDoUsuario, RespostasDoUsuario, RespostaDaResposta
@@ -193,3 +194,32 @@ class DeletarResposta(View):
         resposta.delete()
         messages.success(request, 'Resposta excluída com sucesso.')
         return redirect('lista:detalhes', pk=resposta.post.pk)
+
+
+class Busca(ListView):
+    model = PerguntasDoUsuario
+    template_name = 'lista/home.html'
+    context_object_name = 'perguntas'
+    paginate_by = PER_PAGE
+    ordering = ['-criado_em']
+
+    def get(self, request, *args, **kwargs):
+        termo = request.GET.get('termo')
+        if termo == '' or termo is None:
+            return redirect('lista:index')
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self, *args, **kwargs):
+        termo = self.request.GET.get('termo')
+        qs = super().get_queryset(*args, **kwargs)
+
+        if not termo:
+            return qs
+
+        qs = qs.filter(
+            Q(titulo__icontains=termo) | Q(
+                descricao__icontains=termo) | Q(categoria__icontains=termo)
+        )
+        print(termo)
+
+        return qs

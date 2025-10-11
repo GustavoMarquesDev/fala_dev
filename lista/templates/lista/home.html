@@ -10,6 +10,41 @@
         <p>Faça perguntas e obtenha respostas da comunidade de desenvolvedores.</p>
         <a href="{% url 'lista:perguntar' %}" class="btn-ask">Perguntar</a>
     </div>
+
+    <div class="search-section">
+        <div class="search-container">
+            <div class="search-wrapper">
+                <form class="search-form" method="GET" action="{% url 'lista:busca' %}">
+                    <div class="search-input-group">
+                        <div class="search-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <input 
+                            type="search"
+                            name="termo"
+                            value="{{ request.GET.termo }}"
+                            placeholder="Pesquisar perguntas, respostas ou tópicos..."
+                            class="search-input"
+                            autocomplete="off"
+                        >
+                        <button type="submit" class="search-btn">
+                            <i class="fas fa-search"></i>
+                            <span class="search-btn-text">Buscar</span>
+                        </button>
+                    </div>
+                    {% if request.GET.termo %}
+                        <div class="search-suggestions">
+                            <a href="{% url 'lista:index' %}" class="clear-search">
+                                <i class="fas fa-times"></i>
+                                Limpar pesquisa
+                            </a>
+                        </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+    
     {% include "parciais/_cardPerguntas.html" %}
     <div class="row mt-3">
         <div class="col">

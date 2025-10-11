@@ -14,8 +14,10 @@
                     Enviada por: {{ pergunta.usuario.first_name }} {{ pergunta.usuario.last_name }}
                 </span>
                 <span class="mb-3">Data: {{ pergunta.criado_em }}</span>
+                
                 <div class="single-answer">
                     <p>{{ pergunta.descricao }}</p>
+                    
                     <div class="fotos-container">
                         {% for foto in pergunta.fotos.all %}
                             <div class="single-foto">
@@ -27,6 +29,7 @@
                             <p>Nenhuma foto enviada.</p>
                         {% endfor %}
                     </div>
+                    <h3>Categoria:{{ pergunta.categoria }}</h3>
                     {% if request.user == pergunta.usuario %}
                         <a href="{% url 'perfil:minhasPerguntas' %}" class="answer-link ">
                             <i class="fa-solid fa-forward"></i>
@@ -48,7 +51,7 @@
         <div class="questions-section">
             <div class="questions-grid">
                 <div class="question-card mb-2">
-                    <h3 class="mb-1">Resposta de {{ resposta.usuario.first_name }} {{ resposta.usuario.last_name }} <i class="fa-solid fa-reply"></i></h3>
+                    <h3 class="mb-1">Resposta de {{ resposta.usuario.first_name }} {{ resposta.usuario.last_name }} para pergunta: {{pergunta.titulo}}  <i class="fa-solid fa-reply"></i></h3>
                     <span class="mb-3">Data: {{ resposta.data_de_criacao }}</span>
                     <div class="single-answer">
                         <p>{{ resposta.resposta }}</p>

@@ -12,5 +12,6 @@ urlpatterns = [
     path('resposta-da-resposta/<int:pk>/',
          views.RespostaDaResposta.as_view(), name='resposta-da-resposta'),
     path('editar/<int:pk>/', views.EditarResposta.as_view(), name='editar'),
-    path('deletar/<int:pk>/', views.DeletarResposta.as_view(), name='deletar')
+    path('deletar/<int:pk>/', views.DeletarResposta.as_view(), name='deletar'),
+    path('busca/', views.Busca.as_view(), name='busca'),
 ]

@@ -119,8 +119,13 @@ class AtualizarPerfilForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
 
-        # Verifica se o email já está sendo usado por outro usuário
+        # Verifica se o email já está sendo usado por outro usuário (modelo User)
         if User.objects.filter(email=email).exclude(pk=self.user.pk).exists():
+            raise forms.ValidationError(
+                'Este email já está sendo usado por outro usuário.')
+
+        # Verifica se o email já está sendo usado por outro perfil (modelo Perfil)
+        if Perfil.objects.filter(email=email).exclude(user=self.user).exists():
             raise forms.ValidationError(
                 'Este email já está sendo usado por outro usuário.')
 
