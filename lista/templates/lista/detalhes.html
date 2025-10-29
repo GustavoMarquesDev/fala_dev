@@ -29,7 +29,17 @@
                             <p>Nenhuma foto enviada.</p>
                         {% endfor %}
                     </div>
-                    <h3>Categoria:{{ pergunta.categoria }}</h3>
+                    {% if pergunta.categoria %}
+                        <div class='tag-container'>
+                            <i class="fa-solid fa-tags"></i>
+                            <span class="tag">{{ pergunta.categoria }}</span>
+                        </div>
+                    {% else %}
+                        <div class='tag-container'>
+                            <i class="fa-solid fa-tags"></i>
+                            <span class="tag">Sem categoria</span>
+                        </div>
+                    {% endif %}
                     {% if request.user == pergunta.usuario %}
                         <a href="{% url 'perfil:minhasPerguntas' %}" class="answer-link ">
                             <i class="fa-solid fa-forward"></i>
