@@ -5,7 +5,7 @@ from django.views.generic import DetailView, ListView
 from django.db.models import Q
 
 from lista.forms import PerguntaForm, RespostaForm, RespostaDaRespostaForm
-from perfil.models import FotoErro, PerguntasDoUsuario, RespostasDoUsuario, RespostaDaResposta
+from perfil.models import FotoErro, PerguntasDoUsuario, RespostasDoUsuario
 
 PER_PAGE = 10
 

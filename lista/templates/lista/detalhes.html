@@ -16,8 +16,10 @@
                 <span>Data: {{ pergunta.criado_em }}</span>
                 {% if pergunta.categoria %}
                         <div class='tag-container mb-3 mt-3'>
-                            <i class="fa-solid fa-tags"></i>
-                            <span class="tag">{{ pergunta.categoria }}</span>
+                            <a href="/?termo={{ pergunta.categoria|urlencode }}">
+                                <i class="fa-solid fa-tags"></i>
+                                <span class="tag">{{ pergunta.categoria }}</span>
+                            </a>
                         </div>
                     {% else %}
                         <div class='tag-container mb-3 mt-3'>
