@@ -13,8 +13,18 @@
                 <span>
                     Enviada por: {{ pergunta.usuario.first_name }} {{ pergunta.usuario.last_name }}
                 </span>
-                <span class="mb-3">Data: {{ pergunta.criado_em }}</span>
-                
+                <span>Data: {{ pergunta.criado_em }}</span>
+                {% if pergunta.categoria %}
+                        <div class='tag-container mb-3 mt-3'>
+                            <i class="fa-solid fa-tags"></i>
+                            <span class="tag">{{ pergunta.categoria }}</span>
+                        </div>
+                    {% else %}
+                        <div class='tag-container mb-3 mt-3'>
+                            <i class="fa-solid fa-tags"></i>
+                            <span class="tag">Sem categoria</span>
+                        </div>
+                    {% endif %}
                 <div class="single-answer">
                     <p>{{ pergunta.descricao }}</p>
                     
@@ -29,23 +39,13 @@
                             <p>Nenhuma foto enviada.</p>
                         {% endfor %}
                     </div>
-                    {% if pergunta.categoria %}
-                        <div class='tag-container'>
-                            <i class="fa-solid fa-tags"></i>
-                            <span class="tag">{{ pergunta.categoria }}</span>
-                        </div>
-                    {% else %}
-                        <div class='tag-container'>
-                            <i class="fa-solid fa-tags"></i>
-                            <span class="tag">Sem categoria</span>
-                        </div>
-                    {% endif %}
                     {% if request.user == pergunta.usuario %}
                         <a href="{% url 'perfil:minhasPerguntas' %}" class="answer-link ">
                             <i class="fa-solid fa-forward"></i>
                             Ver em minhas perguntas
                         </a>
                     {% else %}
+                        
                         <a href="{% url 'lista:resposta' pergunta.id %}" class="answer-link ">
                             <i class="fa-solid fa-comment"></i>
                             Responder
@@ -56,7 +56,7 @@
             </div>
         </div>
     </div>
-    <h2 class="text-center">Respostas</h2>
+    
     {% for resposta in pergunta.votos.all %}
         <div class="questions-section">
             <div class="questions-grid">
@@ -174,7 +174,8 @@
             <div class="questions-section">
             <div class="questions-grid">
                 <div class="question-card mb-2">
-                    <p class="text-center">Nenhuma resposta ainda, fique atento as suas notificações.</p>
+                    <h2 class="text-center">Nenhuma resposta ainda, fique atento as suas notificações.</h2>
+                    
                 </div>
             </div>
         </div>
@@ -182,11 +183,8 @@
             <div class="questions-section">
             <div class="questions-grid">
                 <div class="question-card mb-2">
-                    <p class="text-center">Nenhuma resposta ainda. Seja o primeiro a responder!</p>
-                    <a href="{% url 'lista:resposta' pergunta.id %}" class="answer-link ">
-                        <i class="fa-regular fa-comment"></i>
-                        Responder
-                    </a>
+                    <h2 class="text-center">Nenhuma resposta ainda. Seja o primeiro a responder!!!👍👍👍</h2>
+                    
                 </div>
             </div>
         </div>
