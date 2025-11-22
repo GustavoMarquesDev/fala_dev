@@ -297,3 +297,22 @@ class AvaliacaoRespostaDaResposta(models.Model):
     def __str__(self):
         tipo = "Like" if self.tipo_avaliacao == self.LIKE else "Dislike"
         return f"{tipo} de {self.usuario.username} em {self.resposta}"
+
+
+class Notificacao(models.Model):
+    class Meta:
+        verbose_name = 'Notificação'
+        verbose_name_plural = 'Notificações'
+        ordering = ['-criado_em']
+
+    usuario = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="notificacoes")
+    pergunta = models.ForeignKey(
+        PerguntasDoUsuario, on_delete=models.CASCADE, related_name="notificacoes")
+    resposta = models.ForeignKey(
+        RespostasDoUsuario, on_delete=models.CASCADE, related_name="notificacoes")
+    lida = models.BooleanField(default=False, verbose_name='Lida')
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Notificação para {self.usuario.username} - {self.pergunta.titulo[:50]}"
