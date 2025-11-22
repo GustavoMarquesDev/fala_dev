@@ -17,14 +17,17 @@
                 {% if pergunta.categoria %}
                         <div class='tag-container mb-3 mt-3'>
                             <a href="/?termo={{ pergunta.categoria|urlencode }}">
+                                <span class="tag">{{ pergunta.categoria }}
                                 <i class="fa-solid fa-tags"></i>
-                                <span class="tag">{{ pergunta.categoria }}</span>
+                                </span>
+                                
                             </a>
                         </div>
                     {% else %}
                         <div class='tag-container mb-3 mt-3'>
-                            <i class="fa-solid fa-tags"></i>
-                            <span class="tag">Sem categoria</span>
+                            <span class="tag">Sem categoria
+                                <i class="fa-solid fa-tags"></i>
+                            </span>
                         </div>
                     {% endif %}
                 <div class="single-answer">
@@ -41,18 +44,19 @@
                             <p>Nenhuma foto enviada.</p>
                         {% endfor %}
                     </div>
-                    {% if request.user == pergunta.usuario %}
-                        <a href="{% url 'perfil:minhasPerguntas' %}" class="answer-link ">
-                            <i class="fa-solid fa-forward"></i>
-                            Ver em minhas perguntas
-                        </a>
-                    {% else %}
-                        
-                        <a href="{% url 'lista:resposta' pergunta.id %}" class="answer-link ">
-                            <i class="fa-solid fa-comment"></i>
-                            Responder
-                        </a>
-                    {% endif %}
+                    <div class="buttons-container">
+                        {% if request.user == pergunta.usuario %}
+                            <a href="{% url 'perfil:minhasPerguntas' %}" class="answer-link">
+                                <i class="fa-solid fa-forward"></i>
+                                Ver em minhas perguntas
+                            </a>
+                        {% else %}
+                            <a href="{% url 'lista:resposta' pergunta.id %}" class="answer-link">
+                                <i class="fa-solid fa-comment"></i>
+                                Responder
+                            </a>
+                        {% endif %}
+                    </div>
 
                 </div>
             </div>
@@ -94,8 +98,8 @@
                             </div>
                         {% else %}
                             <div class="buttons-container">
-                            <a href="{% url 'lista:resposta-da-resposta' resposta.pk %}" class="answer-link ">
-                                <button class="btn btn-info"> <i class="fa-solid fa-reply"></i> Responder Resposta </button>
+                            <a href="{% url 'lista:resposta-da-resposta' resposta.pk %}" class="answer-link m-0 " >
+                                <i class="fa-solid fa-reply"></i> Responder Resposta
                             </a>
                             <form method="post" action="{% url 'perfil:like' resposta.pk %}" style="display: inline;">
                                 {% csrf_token %}

@@ -28,6 +28,11 @@
     <div id="fotos-container">
         <input type="file" name="fotos" class="form-control mt-2" onchange="addInput(this)">
     </div>
-    <button type="submit" class="btn-perguntar">Enviar</button>
+    {% if fotos_existentes  %}
+        <button type="submit" class="btn-perguntar">Alterar</button>
+
+    {% else %}
+        <button type="submit" class="btn-perguntar">Enviar</button>
+    {% endif %}
 </form>
 <script src="{% static 'assets/custom/js/add_foto_input.js' %}"></script>

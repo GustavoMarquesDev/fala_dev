@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+    Fala Dev!!! - Notificações
+{% endblock titulo %}
+
+{% block conteudo %}
+    <h1>Notificações</h1>
+    <div class="questions-section">
+        {% if notificacoes %}
+            <div class="mb-3 text-right">
+                <button id="marcar-todas-lidas" class="btn btn-primary">
+                    <i class="fa-solid fa-check-double"></i>
+                    Marcar todas como lidas
+                </button>
+            </div>
+            <div class="questions-grid">
+                {% for notificacao in notificacoes %}
+                    <div class="question-card mb-2 {% if not notificacao.lida %}border-left-primary{% endif %}" 
+                         data-notificacao-id="{{ notificacao.id }}"
+                         style="{% if not notificacao.lida %}border-left: 4px solid var(--primary); background: rgba(78, 115, 223, 0.05);{% endif %}">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h3 class="mb-1">
+                                <a href="{% url 'lista:detalhes' notificacao.pergunta.pk %}" class="question-link">
+                                    {{ notificacao.pergunta.titulo }}
+                                </a>
+                            </h3>
+                            {% if not notificacao.lida %}
+                                <span class="badge badge-primary">Nova</span>
+                            {% endif %}
+                        </div>
+                        <p class="mb-2">
+                            <i class="fa-solid fa-user"></i>
+                            <strong>{{ notificacao.resposta.usuario.first_name }} {{ notificacao.resposta.usuario.last_name }}</strong>
+                            respondeu sua pergunta
+                        </p>
+                        <span class="mb-3 d-block text-muted">
+                            <i class="fa-solid fa-calendar"></i>
+                            {{ notificacao.criado_em|date:"d/m/Y H:i" }}
+                        </span>
+                        <div class="single-answer">
+                            <p><strong>Resposta:</strong></p>
+                            <p>{{ notificacao.resposta.resposta|truncatewords:30 }}</p>
+                            <div class="buttons-container mt-3">
+                                <a href="{% url 'lista:detalhes' notificacao.pergunta.pk %}" 
+                                   class="answer-link marcar-lida"
+                                   data-notificacao-id="{{ notificacao.id }}">
+                                    <i class="fa-solid fa-eye"></i>
+                                    Ver resposta completa
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center">
+                <p class="mb-3">Você não tem notificações.</p>
+                <a href="{% url 'lista:index' %}" class="btn btn-primary">
+                    <i class="fa-solid fa-home"></i>
+                    Voltar para home
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Função para obter o CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Marcar notificação como lida ao clicar no link
+            document.querySelectorAll('.marcar-lida').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    const notificacaoId = this.getAttribute('data-notificacao-id');
+                    if (notificacaoId) {
+                        fetch(`/perfil/notificacoes/marcar-lida/${notificacaoId}/`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': csrftoken,
+                                'Content-Type': 'application/json'
+                            },
+                            credentials: 'same-origin'
+                        });
+                    }
+                });
+            });
+
+            // Marcar todas como lidas
+            const btnMarcarTodas = document.getElementById('marcar-todas-lidas');
+            if (btnMarcarTodas) {
+                btnMarcarTodas.addEventListener('click', function() {
+                    fetch('/perfil/notificacoes/marcar-todas-lidas/', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrftoken,
+                            'Content-Type': 'application/json'
+                        },
+                        credentials: 'same-origin'
+                    }).then(function() {
+                        location.reload();
+                    });
+                });
+            }
+        });
+    </script>
+{% endblock conteudo %}
+

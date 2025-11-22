@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+    Fala Dev!!! - Minhas Respostas aos Outros
+{% endblock titulo %}
+
+{% block conteudo %}
+    <h1>Minhas Respostas aos Outros</h1>
+    <div class="questions-section">
+        {% if respostas %}
+            <div class="questions-grid">
+                {% for resposta in respostas %}
+                    <div class="question-card mb-2">
+                        <h2 class="mb-1">
+                            <a href="{% url 'lista:detalhes' resposta.post.pk %}" class="question-link">
+                                {{ resposta.post.titulo }}
+                            </a>
+                        </h2>
+                        <span class="mb-2 d-block">
+                            <i class="fa-solid fa-user"></i>
+                            Pergunta de: {{ resposta.post.usuario.first_name }} {{ resposta.post.usuario.last_name }}
+                        </span>
+                        <span class="mb-3 d-block">
+                            <i class="fa-solid fa-calendar"></i>
+                            Data da resposta: {{ resposta.data_de_criacao|date:"d/m/Y H:i" }}
+                        </span>
+                        <div class="single-answer">
+                            <p><strong>Minha resposta:</strong></p>
+                            <p>{{ resposta.resposta }}</p>
+                            {% if resposta.imagem %}
+                                <div class="fotos-container">
+                                    <div class="single-foto">
+                                        <a href="{{ resposta.imagem.url }}" target="_blank">
+                                            <img src="{{ resposta.imagem.url }}" alt="Imagem da resposta">
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="buttons-container mt-3">
+                                <a href="{% url 'lista:detalhes' resposta.post.pk %}" class="answer-link">
+                                    <i class="fa-solid fa-eye"></i>
+                                    Ver pergunta completa
+                                </a>
+                                {% if request.user == resposta.usuario %}
+                                    <a href="{% url 'perfil:editarResposta' resposta.id %}" class="answer-link">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        Editar resposta
+                                    </a>
+                                    <a href="{% url 'lista:deletar' resposta.pk %}" 
+                                       class="answer-link text-danger" 
+                                       onclick="return confirm('Tem certeza que deseja deletar esta resposta? Esta ação não pode ser desfeita.')">
+                                        <i class="fa-solid fa-trash"></i>
+                                        Remover
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center">
+                <p class="mb-3">Você ainda não respondeu nenhuma pergunta de outros usuários.</p>
+                <a href="{% url 'lista:index' %}" class="btn btn-primary">
+                    <i class="fa-solid fa-search"></i>
+                    Explorar perguntas
+                </a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock conteudo %}
+

@@ -27,18 +27,37 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{% url 'perfil:minhasPerguntas' %}">Minhas perguntas</a>
-                    <a class="dropdown-item" href="{% url 'perfil:listaRespostas' %}">Minhas respostas</a>
+                    <a class="dropdown-item" href="{% url 'perfil:minhasRespostasAosOutros' %}">Minhas respostas </a>
                     <a class="dropdown-item" href="{% url 'perfil:atualizarPerfil' %}">Perfil</a>
                     <a class="dropdown-item" href="{% url 'perfil:logout' %}">Sair</a>
                 </div>
             </li>
             {% endif %}
+            {% if user.is_authenticated %}
             <li class="nav-item ml-lg-3">
-                <a class="nav-link nav-cart-link d-flex align-items-center position-relative" href="#}">
-                    <i class="fa-solid fa-earth-americas"></i>
+                <a class="nav-link nav-cart-link d-flex align-items-center position-relative" href="{% url 'perfil:notificacoes' %}">
+                    <i class="fa-solid fa-bell"></i>
                     <span class="nav-cart-text">Notificações</span>
+                    {% if notificacoes_nao_lidas_count > 0 %}
+                        <span class="badge badge-danger notification-badge" style="
+                            position: absolute;
+                            top: -5px;
+                            right: -5px;
+                            background: #dc3545;
+                            color: white;
+                            border-radius: 50%;
+                            width: 20px;
+                            height: 20px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 0.7rem;
+                            font-weight: bold;
+                        ">{{ notificacoes_nao_lidas_count }}</span>
+                    {% endif %}
                 </a>
             </li>
+            {% endif %}
         </ul>
     </div>
 </nav>

@@ -5,7 +5,7 @@ from django.views.generic import DetailView, ListView
 from django.db.models import Q
 
 from lista.forms import PerguntaForm, RespostaForm, RespostaDaRespostaForm
-from perfil.models import FotoErro, PerguntasDoUsuario, RespostasDoUsuario
+from perfil.models import FotoErro, PerguntasDoUsuario, RespostasDoUsuario, Notificacao
 
 PER_PAGE = 10
 
@@ -112,6 +112,14 @@ class Resposta(View):
             resposta.usuario = request.user
             resposta.post = pergunta
             resposta.save()  # Salvando no banco de dados
+
+            # Criar notificação se o autor da resposta não for o autor da pergunta
+            if pergunta.usuario != request.user:
+                Notificacao.objects.create(
+                    usuario=pergunta.usuario,
+                    pergunta=pergunta,
+                    resposta=resposta
+                )
 
             messages.success(request, 'Resposta enviada com sucesso.')
             return redirect('lista:detalhes', pk=kwargs['pk'])

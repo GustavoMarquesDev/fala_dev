@@ -139,13 +139,70 @@ class MinhasRespostas(View):
         return render(request, 'perfil/minhas_respostas.html', context)
 
 
-class ListaRespostas(View):
+class MinhasRespostasAosOutros(View):
     def get(self, request):
+        if not request.user.is_authenticated:
+            messages.error(request, 'Faça login para ver suas respostas.')
+            return redirect('perfil:login')
+
+        # Respostas do usuário para perguntas de outros usuários
         respostas = models.RespostasDoUsuario.objects.filter(
             usuario=request.user
+        ).exclude(
+            post__usuario=request.user
         ).order_by('-data_de_criacao')
+
         context = {'respostas': respostas}
-        return render(request, 'perfil/lista_respostas.html', context)
+        return render(request, 'perfil/minhas_respostas_aos_outros.html', context)
+
+
+class ListarNotificacoes(View):
+    def get(self, request):
+        if not request.user.is_authenticated:
+            messages.error(request, 'Faça login para ver suas notificações.')
+            return redirect('perfil:login')
+
+        # Marcar todas as notificações como lidas quando o usuário abre a página
+        models.Notificacao.objects.filter(
+            usuario=request.user,
+            lida=False
+        ).update(lida=True)
+
+        notificacoes = models.Notificacao.objects.filter(
+            usuario=request.user
+        ).order_by('-criado_em')
+
+        context = {'notificacoes': notificacoes}
+        return render(request, 'perfil/notificacoes.html', context)
+
+
+class MarcarNotificacaoLida(View):
+    def post(self, request, pk):
+        if not request.user.is_authenticated:
+            return HttpResponse('Unauthorized', status=401)
+
+        notificacao = get_object_or_404(
+            models.Notificacao,
+            pk=pk,
+            usuario=request.user
+        )
+        notificacao.lida = True
+        notificacao.save()
+
+        return HttpResponse('OK', status=200)
+
+
+class MarcarTodasNotificacoesLidas(View):
+    def post(self, request):
+        if not request.user.is_authenticated:
+            return HttpResponse('Unauthorized', status=401)
+
+        models.Notificacao.objects.filter(
+            usuario=request.user,
+            lida=False
+        ).update(lida=True)
+
+        return HttpResponse('OK', status=200)
 
 
 class RemoverPergunta(View):
