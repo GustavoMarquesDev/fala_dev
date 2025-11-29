@@ -17,7 +17,26 @@
                     
                     <hr>
                     
-                    <h4>Resposta que você está comentando:</h4>
+                    {% if resposta_pai %}
+                        <h4>Resposta que você está respondendo:</h4>
+                        <div class="resposta-pai mb-3 p-3 border-left" style="background-color: #f8f9fa;">
+                            <p><strong>Por:</strong> {{ resposta_pai.usuario.first_name }} {{ resposta_pai.usuario.last_name }}</p>
+                            <p>{{ resposta_pai.texto_resposta }}</p>
+                            {% if resposta_pai.imagem %}
+                                <div class="fotos-container">
+                                    <div class="single-foto">
+                                        <a href="{{ resposta_pai.imagem.url }}" target="_blank">
+                                            <img src="{{ resposta_pai.imagem.url }}" alt="Imagem da resposta" style="max-width: 200px;">
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <hr>
+                    {% endif %}
+                    
+                    <h4>Resposta original que você está comentando:</h4>
                     <div class="resposta-original">
                         <p><strong>Por:</strong> {{ resposta.usuario.first_name }} {{ resposta.usuario.last_name }}</p>
                         <p>{{ resposta.resposta }}</p>
@@ -37,6 +56,9 @@
                     <h4>Sua Resposta:</h4>
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
+                        {% if resposta_pai_id %}
+                            <input type="hidden" name="resposta_pai_id" value="{{ resposta_pai_id }}">
+                        {% endif %}
                         
                         <div class="form-group mb-3">
                             <label for="{{ form.texto_resposta.id_for_label }}">Resposta:</label>
@@ -66,7 +88,7 @@
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa-solid fa-paper-plane"></i> Enviar Resposta
                             </button>
-                            <a href="{% url 'lista:detalhes' pergunta.pk %}" class="btn btn-secondary">
+                            <a href="{% url 'lista:detalhes' pergunta.pk %}" class="btn btn-primary">
                                 <i class="fa-solid fa-arrow-left"></i> Voltar
                             </a>
                         </div>

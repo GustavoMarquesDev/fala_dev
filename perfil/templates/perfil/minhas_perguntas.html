@@ -38,15 +38,15 @@
                         </div>
                         {% if request.user == pergunta.usuario %}
                             <div class="buttons-container">
-                                <a href="{% url 'perfil:minhasRespostas' pergunta.id %}" class="answer-link">
+                                <a href="{% url 'perfil:minhasRespostas' pergunta.id %}" class="answer-link ver">
                                     <i class="fa-solid fa-forward"></i>
                                     Ver respostas
                                 </a>
-                                <a href="{% url 'perfil:editar' pergunta.id %}" class="answer-link">
+                                <a href="{% url 'perfil:editar' pergunta.id %}" class="answer-link editar">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                     Editar
                                 </a>
-                                <a href="{% url 'perfil:removerPergunta' pergunta.id %}" class="answer-link text-danger" onclick="return confirm('Tem certeza que deseja deletar esta pergunta? Esta ação não pode ser desfeita.')">
+                                <a href="{% url 'perfil:removerPergunta' pergunta.id %}" class="answer-link  remover" onclick="return confirm('Tem certeza que deseja deletar esta pergunta? Esta ação não pode ser desfeita.')">
                                     <i class="fa-solid fa-trash"></i>
                                     Remover
                                 </a>

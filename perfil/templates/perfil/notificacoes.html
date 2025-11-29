@@ -31,8 +31,13 @@
                         </div>
                         <p class="mb-2">
                             <i class="fa-solid fa-user"></i>
-                            <strong>{{ notificacao.resposta.usuario.first_name }} {{ notificacao.resposta.usuario.last_name }}</strong>
-                            respondeu sua pergunta
+                            {% if notificacao.resposta_da_resposta %}
+                                <strong>{{ notificacao.resposta_da_resposta.usuario.first_name }} {{ notificacao.resposta_da_resposta.usuario.last_name }}</strong>
+                                respondeu sua resposta
+                            {% else %}
+                                <strong>{{ notificacao.resposta.usuario.first_name }} {{ notificacao.resposta.usuario.last_name }}</strong>
+                                respondeu sua pergunta
+                            {% endif %}
                         </p>
                         <span class="mb-3 d-block text-muted">
                             <i class="fa-solid fa-calendar"></i>
@@ -40,7 +45,11 @@
                         </span>
                         <div class="single-answer">
                             <p><strong>Resposta:</strong></p>
-                            <p>{{ notificacao.resposta.resposta|truncatewords:30 }}</p>
+                            {% if notificacao.resposta_da_resposta %}
+                                <p>{{ notificacao.resposta_da_resposta.texto_resposta|truncatewords:30 }}</p>
+                            {% else %}
+                                <p>{{ notificacao.resposta.resposta|truncatewords:30 }}</p>
+                            {% endif %}
                             <div class="buttons-container mt-3">
                                 <a href="{% url 'lista:detalhes' notificacao.pergunta.pk %}" 
                                    class="answer-link marcar-lida"

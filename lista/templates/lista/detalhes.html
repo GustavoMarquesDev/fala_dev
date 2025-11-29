@@ -46,12 +46,12 @@
                     </div>
                     <div class="buttons-container">
                         {% if request.user == pergunta.usuario %}
-                            <a href="{% url 'perfil:minhasPerguntas' %}" class="answer-link">
+                            <a href="{% url 'perfil:minhasPerguntas' %}" class="mais-detalhes">
                                 <i class="fa-solid fa-forward"></i>
                                 Ver em minhas perguntas
                             </a>
                         {% else %}
-                            <a href="{% url 'lista:resposta' pergunta.id %}" class="answer-link">
+                            <a href="{% url 'lista:resposta' pergunta.id %}" class="mais-detalhes criar-resposta">
                                 <i class="fa-solid fa-comment"></i>
                                 Responder
                             </a>
@@ -98,7 +98,7 @@
                             </div>
                         {% else %}
                             <div class="buttons-container">
-                            <a href="{% url 'lista:resposta-da-resposta' resposta.pk %}" class="answer-link m-0 " >
+                            <a href="{% url 'lista:resposta-da-resposta' resposta.pk %}" class="mais-detalhes m-0 " >
                                 <i class="fa-solid fa-reply"></i> Responder Resposta
                             </a>
                             <form method="post" action="{% url 'perfil:like' resposta.pk %}" style="display: inline;">
@@ -151,8 +151,8 @@
                                         </div>
                                     {% else %}
                                         <div class="buttons-container mt-2">
-                                            <a href="{% url 'lista:resposta-da-resposta' resposta.pk %}" class="answer-link">
-                                                <button class="btn btn-info btn-sm"> <i class="fa-solid fa-reply"></i> Responder </button>
+                                            <a href="{% url 'lista:resposta-da-resposta' resposta.pk %}?resposta_pai_id={{ resposta_da_resposta.pk }}" class="mais-detalhes">
+                                                <i class="fa-solid fa-reply"></i> Responder
                                             </a>
                                             <form method="post" action="{% url 'perfil:like_resposta_da_resposta' resposta_da_resposta.pk %}" style="display: inline;">
                                                 {% csrf_token %}

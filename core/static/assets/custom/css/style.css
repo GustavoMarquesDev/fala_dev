@@ -165,18 +165,19 @@ main {
   text-decoration: none;
   font-size: 1.1rem;
   box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
-  transition: transform 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
+  border: none;
 }
 
 .btn-ask:hover,
 .btn-ask:focus {
   text-decoration: none;
   color: var(--secondary);
-  border-radius: 2rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.07);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #ffed4e;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   outline: none !important;
   border: none;
 }
@@ -234,7 +235,6 @@ main {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.6rem 1.2rem;
   border-radius: 12px;
   font-size: 0.95rem;
   font-weight: 600;
@@ -246,6 +246,84 @@ main {
   position: relative;
   overflow: hidden;
   outline: none;
+}
+
+.criar-resposta {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: var(--card-bg) !important;
+  border: none;
+}
+
+.mais-detalhes {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, var(--primary) 0%, #6c5ce7 100%);
+  padding: 0.8rem 1.5rem;
+  color: white !important;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  border-radius: 30px;
+  border: none;
+}
+
+.mais-detalhes:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(78, 115, 223, 0.4);
+  background: linear-gradient(135deg, #5a67d8 0%, #7c3aed 100%);
+  color: white !important;
+  text-decoration: none;
+}
+
+.mais-detalhes i {
+  font-size: 0.9rem;
+  color: white !important;
+  transition: transform 0.3s ease;
+}
+
+.mais-detalhes:hover i {
+  transform: scale(1.15);
+  color: white !important;
+}
+
+/* Remover width fixo quando não necessário */
+.mais-detalhes.m-0 {
+  width: auto;
+}
+
+.mais-detalhes.criar-resposta {
+  width: auto;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.mais-detalhes.criar-resposta:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%) !important;
+}
+
+.ver,
+.editar,
+.remover {
+  padding: 10px 20px;
+  border: none;
+}
+
+.ver {
+  background: linear-gradient(135deg, #46996e 0%, #062b13 100%) !important;
+  color: var(--card-bg) !important;
+}
+
+.editar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: var(--card-bg) !important;
+}
+
+.remover {
+  background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%) !important;
+  box-shadow: 0 4px 15px rgba(238, 9, 121, 0.3) !important;
+  color: var(--card-bg) !important;
 }
 
 .answer-link::before {
@@ -286,6 +364,7 @@ main {
 .answer-link i {
   font-size: 0.9rem;
   transition: transform 0.3s ease;
+  color: var(--card-bg) !important;
 }
 
 .answer-link:hover i {
@@ -778,6 +857,7 @@ main {
 
 .card-header {
   border-radius: 15px 15px 0 0 !important;
+  background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
 }
 
 /* Estilos base para botões - podem ser sobrescritos pelos estilos específicos abaixo */
@@ -792,11 +872,15 @@ main {
 }
 
 .text-primary {
-  color: #0d6efd !important;
+  color: var(--primary) !important;
 }
 
 .img-thumbnail {
   border-radius: 8px;
+}
+
+label {
+  color: var(--primary) !important;
 }
 
 /******************* Footer *******************/
@@ -1161,6 +1245,11 @@ a .btn-primary {
   cursor: pointer;
 }
 
+.btn-primary i {
+  font-size: 0.9rem;
+  color: #fff;
+}
+
 .btn-primary:hover,
 a .btn-primary:hover {
   transform: translateY(-2px);
@@ -1195,6 +1284,11 @@ form button.btn-danger:not([type="submit"]) {
   gap: 0.5rem;
   text-decoration: none;
   cursor: pointer;
+}
+
+.btn-danger i {
+  font-size: 0.9rem;
+  color: #fff;
 }
 
 .btn-danger:hover,
@@ -1233,6 +1327,11 @@ form .btn-success {
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
+}
+
+.btn-success i {
+  font-size: 0.9rem;
+  color: #fff;
 }
 
 .btn-success:hover,
@@ -1288,6 +1387,11 @@ a .btn-info {
   cursor: pointer;
 }
 
+.btn-info i {
+  font-size: 0.9rem;
+  color: #fff;
+}
+
 .btn-info:hover,
 a .btn-info:hover {
   transform: translateY(-2px);
@@ -1310,6 +1414,10 @@ a .btn-info:active {
   border-radius: 10px;
 }
 
+.btn-sm i {
+  font-size: 0.8rem;
+}
+
 /* Ícones nos botões */
 .btn i,
 .btn-primary i,
@@ -1318,6 +1426,7 @@ a .btn-info:active {
 .btn-info i {
   font-size: 0.9rem;
   transition: transform 0.3s ease;
+  color: inherit;
 }
 
 .btn:hover i,
@@ -1326,6 +1435,31 @@ a .btn-info:active {
 .btn-success:hover i,
 .btn-info:hover i {
   transform: scale(1.1);
+  color: inherit;
+}
+
+/* Cores específicas para ícones de editar */
+.btn-primary i.fa-pencil,
+.btn-primary i.fa-pen-to-square {
+  color: #fff;
+}
+
+/* Cores específicas para ícones de remover */
+.btn-danger i.fa-trash,
+.btn-danger i.fa-trash-can {
+  color: #fff;
+}
+
+/* Cores específicas para ícones de ver/forward */
+.mais-detalhes i.fa-forward,
+.mais-detalhes i.fa-eye {
+  color: #fff !important;
+}
+
+/* Cores específicas para ícones de responder */
+.mais-detalhes i.fa-comment,
+.mais-detalhes i.fa-reply {
+  color: #fff !important;
 }
 
 /* Remover estilos padrão do Bootstrap que conflitam */
@@ -1336,6 +1470,38 @@ a .btn-info:active {
 .buttons-container form {
   margin: 0;
   display: inline-block;
+}
+
+/* Corrigir botões dentro de links */
+.buttons-container a .btn,
+.buttons-container a button.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Remover botão dentro de link - corrigir HTML inválido */
+.mais-detalhes button,
+.mais-detalhes .btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  box-shadow: none;
+}
+
+.mais-detalhes button:hover,
+.mais-detalhes .btn:hover {
+  background: transparent;
+  transform: none;
+  box-shadow: none;
+}
+
+.largura-botao-home {
+  width: 277px !important;
 }
 
 /* Responsividade */

@@ -161,7 +161,7 @@ class RespostasDoUsuario(models.Model):
         upload_to="respostas/fotos/%Y/%m/%d",
         verbose_name="Foto de resposta",
         blank=True, null=True,
-        help_text='Foto de resposta a ser exibida para todos os usuários '
+        help_text='* Foto de resposta a ser exibida para todos os usuários '
     )
 
     def __str__(self):
@@ -237,13 +237,17 @@ class RespostaDaResposta(models.Model):
     class Meta:
         verbose_name = 'Resposta da Resposta'
         verbose_name_plural = 'Respostas da Resposta'
-        unique_together = ("usuario", "resposta")
         ordering = ['-data_de_criacao']
 
     usuario = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="resposta_da_resposta_usuario")
     resposta = models.ForeignKey(
         RespostasDoUsuario, on_delete=models.CASCADE, related_name="resposta_da_resposta")
+    resposta_pai = models.ForeignKey(
+        'self', on_delete=models.CASCADE, related_name="respostas_filhas", null=True, blank=True,
+        verbose_name='Resposta Pai',
+        help_text='Resposta de resposta à qual esta resposta está respondendo'
+    )
     texto_resposta = models.TextField(blank=True, null=True)
     data_de_criacao = models.DateTimeField(default=timezone.now)
     imagem = models.ImageField(
@@ -310,7 +314,9 @@ class Notificacao(models.Model):
     pergunta = models.ForeignKey(
         PerguntasDoUsuario, on_delete=models.CASCADE, related_name="notificacoes")
     resposta = models.ForeignKey(
-        RespostasDoUsuario, on_delete=models.CASCADE, related_name="notificacoes")
+        RespostasDoUsuario, on_delete=models.CASCADE, related_name="notificacoes", null=True, blank=True)
+    resposta_da_resposta = models.ForeignKey(
+        RespostaDaResposta, on_delete=models.CASCADE, related_name="notificacoes", null=True, blank=True)
     lida = models.BooleanField(default=False, verbose_name='Lida')
     criado_em = models.DateTimeField(auto_now_add=True)
 
