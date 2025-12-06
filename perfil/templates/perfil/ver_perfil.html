@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}
+    Fala Dev!!! - Perfil de {{ perfil.nome }} {{ perfil.sobrenome }}
+{% endblock titulo %}
+
+{% block conteudo %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 class="mb-0">
+                        <i class="fa-solid fa-user me-2"></i>
+                        Perfil do Usuário
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        {% if perfil.foto %}
+                            <img src="{{ perfil.foto.url }}" alt="Foto de perfil" class="img-thumbnail rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                        {% else %}
+                            <div class="bg-secondary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 150px; height: 150px;">
+                                <i class="fa-solid fa-user fa-4x text-white"></i>
+                            </div>
+                        {% endif %}
+                        <h4 class="mb-1">{{ perfil.nome }} {{ perfil.sobrenome }}</h4>
+                        <p class="text-muted mb-0">@{{ usuario.username }}</p>
+                    </div>
+
+                    <hr>
+
+                    <!-- Informações do Perfil -->
+                    <div class="mb-4">
+                        <h5 class="mb-3">
+                            <i class="fa-solid fa-info-circle me-2"></i>
+                            Informações Pessoais
+                        </h5>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>
+                                    <i class="fa-solid fa-envelope me-1"></i>
+                                    Email:
+                                </strong>
+                                <p class="mb-0">{{ perfil.email }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>
+                                    <i class="fa-solid fa-briefcase me-1"></i>
+                                    Profissão:
+                                </strong>
+                                <p class="mb-0">{{ perfil.profissao }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Estatísticas -->
+                    <div class="mb-4">
+                        <h5 class="mb-3">
+                            <i class="fa-solid fa-chart-bar me-2"></i>
+                            Estatísticas
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <i class="fa-solid fa-question-circle fa-2x text-primary mb-2"></i>
+                                        <h3 class="mb-0">{{ total_perguntas }}</h3>
+                                        <p class="text-muted mb-0">Perguntas</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <i class="fa-solid fa-comment fa-2x text-success mb-2"></i>
+                                        <h3 class="mb-0">{{ total_respostas }}</h3>
+                                        <p class="text-muted mb-0">Respostas</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botão de Voltar -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'lista:index' %}" class="btn btn-primary">
+                            <i class="fa-solid fa-arrow-left me-1"></i>
+                            Voltar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock conteudo %}
+

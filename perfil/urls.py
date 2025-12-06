@@ -31,4 +31,5 @@ urlpatterns = [
          views.MarcarNotificacaoLida.as_view(), name='marcar_notificacao_lida'),
     path('notificacoes/marcar-todas-lidas/', views.MarcarTodasNotificacoesLidas.as_view(),
          name='marcar_todas_notificacoes_lidas'),
+    path('ver-perfil/<int:pk>/', views.VerPerfil.as_view(), name='ver_perfil'),
 ]

@@ -5,7 +5,7 @@ from django.views.generic import DetailView, ListView
 from django.db.models import Q
 
 from lista.forms import PerguntaForm, RespostaForm, RespostaDaRespostaForm
-from perfil.models import FotoErro, PerguntasDoUsuario, RespostasDoUsuario, RespostaDaResposta, Notificacao
+from perfil.models import FotoErro, PerguntasDoUsuario, RespostasDoUsuario, RespostaDaResposta as RespostaDaRespostaModel, Notificacao
 
 PER_PAGE = 10
 
@@ -150,11 +150,9 @@ class RespostaDaResposta(View):
         resposta_pai_id = request.GET.get('resposta_pai_id')
         resposta_pai = None
         if resposta_pai_id:
-            try:
-                resposta_pai = RespostaDaResposta.objects.get(pk=resposta_pai_id)
-            except RespostaDaResposta.DoesNotExist:
-                pass
-        
+            resposta_pai = RespostaDaRespostaModel.objects.filter(
+                pk=resposta_pai_id).first()
+
         context = {
             'form': form,
             'resposta': resposta,
@@ -183,31 +181,32 @@ class RespostaDaResposta(View):
             resposta_da_resposta = form.save(commit=False)
             resposta_da_resposta.usuario = request.user
             resposta_da_resposta.resposta = resposta
-            
+
             # Verificar se está respondendo a uma resposta de resposta específica
-            resposta_pai_id = request.POST.get('resposta_pai_id') or request.GET.get('resposta_pai_id')
+            resposta_pai_id = request.POST.get(
+                'resposta_pai_id') or request.GET.get('resposta_pai_id')
             if resposta_pai_id:
-                try:
-                    resposta_pai = RespostaDaResposta.objects.get(pk=resposta_pai_id)
+                resposta_pai = RespostaDaRespostaModel.objects.filter(
+                    pk=resposta_pai_id).first()
+                if resposta_pai:
                     resposta_da_resposta.resposta_pai = resposta_pai
-                except RespostaDaResposta.DoesNotExist:
-                    pass
-            
+
             resposta_da_resposta.save()
 
             # Criar notificações
             usuarios_notificados = set()
-            
+
             # Notificar o autor da resposta de resposta (resposta_pai) se estiver respondendo a uma
             if resposta_da_resposta.resposta_pai and resposta_da_resposta.resposta_pai.usuario != request.user:
-                usuarios_notificados.add(resposta_da_resposta.resposta_pai.usuario.id)
+                usuarios_notificados.add(
+                    resposta_da_resposta.resposta_pai.usuario.id)
                 Notificacao.objects.create(
                     usuario=resposta_da_resposta.resposta_pai.usuario,
                     pergunta=resposta.post,
                     resposta=resposta,
                     resposta_da_resposta=resposta_da_resposta
                 )
-            
+
             # Criar notificação para o autor da resposta original se não for o próprio usuário e ainda não foi notificado
             if resposta.usuario != request.user and resposta.usuario.id not in usuarios_notificados:
                 Notificacao.objects.create(

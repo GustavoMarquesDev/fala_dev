@@ -11,7 +11,11 @@
             <div class="question-card mb-2">
                 <h2 class="mb-1">{{ pergunta.titulo }}</h2>
                 <span>
-                    Enviada por: {{ pergunta.usuario.first_name }} {{ pergunta.usuario.last_name }}
+                    Enviada por: 
+                    <a href="{% url 'perfil:ver_perfil' pergunta.usuario.id %}" class="text-decoration-none">
+                        <i class="fa-solid fa-user me-1"></i>
+                        {{ pergunta.usuario.first_name }} {{ pergunta.usuario.last_name }}
+                    </a>
                 </span>
                 <span>Data: {{ pergunta.criado_em }}</span>
                 {% if pergunta.categoria %}
@@ -67,7 +71,14 @@
         <div class="questions-section">
             <div class="questions-grid">
                 <div class="question-card mb-2">
-                    <h3 class="mb-1">Resposta de {{ resposta.usuario.first_name }} {{ resposta.usuario.last_name }} para pergunta: {{pergunta.titulo}}  <i class="fa-solid fa-reply"></i></h3>
+                    <h3 class="mb-1">
+                        Resposta de 
+                        <a href="{% url 'perfil:ver_perfil' resposta.usuario.id %}" class="text-decoration-none">
+                            <i class="fa-solid fa-user me-1"></i>
+                            {{ resposta.usuario.first_name }} {{ resposta.usuario.last_name }}
+                        </a>
+                        para pergunta: {{pergunta.titulo}}  <i class="fa-solid fa-reply"></i>
+                    </h3>
                     <span class="mb-3">Data: {{ resposta.data_de_criacao }}</span>
                     <div class="single-answer">
                         <p>{{ resposta.resposta }}</p>
@@ -124,7 +135,11 @@
                             {% for resposta_da_resposta in resposta.resposta_da_resposta.all %}
                                 <div class="resposta-da-resposta ml-4 mb-3 p-3 border-left">
                                     <h6 class="mb-1">
-                                        Resposta de {{ resposta_da_resposta.usuario.first_name }} {{ resposta_da_resposta.usuario.last_name }}
+                                        Resposta de 
+                                        <a href="{% url 'perfil:ver_perfil' resposta_da_resposta.usuario.id %}" class="text-decoration-none">
+                                            <i class="fa-solid fa-user me-1"></i>
+                                            {{ resposta_da_resposta.usuario.first_name }} {{ resposta_da_resposta.usuario.last_name }}
+                                        </a>
                                         <i class="fa-solid fa-reply-all"></i>
                                     </h6>
                                     <span class="text-muted small">{{ resposta_da_resposta.data_de_criacao }}</span>

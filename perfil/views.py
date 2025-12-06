@@ -463,3 +463,30 @@ class DeslikeRespostaDaResposta(View):
             )
 
         return redirect('lista:detalhes', pk=resposta_da_resposta.resposta.post.pk)
+
+
+class VerPerfil(View):
+    def get(self, request, pk):
+        """Exibe o perfil de um usuário específico"""
+        try:
+            usuario = User.objects.get(pk=pk)
+            perfil = models.Perfil.objects.get(user=usuario)
+        except User.DoesNotExist:
+            messages.error(request, 'Usuário não encontrado.')
+            return redirect('lista:index')
+        except models.Perfil.DoesNotExist:
+            messages.error(request, 'Perfil não encontrado.')
+            return redirect('lista:index')
+        
+        # Contar perguntas e respostas do usuário
+        total_perguntas = models.PerguntasDoUsuario.objects.filter(usuario=usuario).count()
+        total_respostas = models.RespostasDoUsuario.objects.filter(usuario=usuario).count()
+        
+        context = {
+            'perfil': perfil,
+            'usuario': usuario,
+            'total_perguntas': total_perguntas,
+            'total_respostas': total_respostas,
+        }
+        
+        return render(request, 'perfil/ver_perfil.html', context)
